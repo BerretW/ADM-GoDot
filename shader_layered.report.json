@@ -1,0 +1,181 @@
+{
+	"assetSha256": "2e3d901e294c1904ce1ee4911c264d29c7d4da46285891a2fc27404084233e01",
+	"capabilities": {
+		"declared": [
+			"extension:ADM_material_layers_v1"
+		],
+		"implemented": [
+			"ADM-CONTAINER-1 (RAW chunks, header/directory/hash checks)",
+			"ADM-CORE-1 (metadata and structural validation subset)",
+			"ADM-ANIM-1 (container and library metadata validation subset)"
+		],
+		"notes": [
+			"No rendering, texture decoding, animation evaluation, or IK solving in this milestone."
+		]
+	},
+	"chunks": [
+		{
+			"codec": 0,
+			"id": 1,
+			"rawLength": 78,
+			"required": true,
+			"sha256": "eb262a87bf1a5d14920dfa29f467442d749a203dd6d157ab482cf7f19b5631e3",
+			"storedLength": 78,
+			"type": "GEOM"
+		}
+	],
+	"declared_capabilities": [
+		"extension:ADM_material_layers_v1"
+	],
+	"deviations": [],
+	"diagnostics": [
+		"Extension 'ADM_material_layers_v1' is listed but has no entry in 'extensions'."
+	],
+	"manifest": {
+		"accessors": [
+			{
+				"bufferView": 0.0,
+				"componentType": "F32",
+				"count": 3.0,
+				"type": "VEC3"
+			},
+			{
+				"bufferView": 1.0,
+				"componentType": "F32",
+				"count": 3.0,
+				"type": "VEC3"
+			},
+			{
+				"bufferView": 2.0,
+				"componentType": "U16",
+				"count": 3.0,
+				"type": "SCALAR"
+			}
+		],
+		"asset": {
+			"generator": "ADM reference fixture 1.0"
+		},
+		"bufferViews": [
+			{
+				"byteLength": 36.0,
+				"byteOffset": 0.0,
+				"chunkId": 1.0
+			},
+			{
+				"byteLength": 36.0,
+				"byteOffset": 36.0,
+				"chunkId": 1.0
+			},
+			{
+				"byteLength": 6.0,
+				"byteOffset": 72.0,
+				"chunkId": 1.0
+			}
+		],
+		"extensionsUsed": [
+			"ADM_material_layers_v1"
+		],
+		"materials": [
+			{
+				"alphaMode": "OPAQUE",
+				"animationId": "body_paint",
+				"baseColorFactor": [
+					0.4,
+					0.05,
+					0.03,
+					1.0
+				],
+				"emissiveFactor": [
+					0.0,
+					0.0,
+					0.0
+				],
+				"extensions": {
+					"ADM_material_layers_v1": {
+						"base": {
+							"baseColorFactor": [
+								0.4,
+								0.05,
+								0.03,
+								1.0
+							],
+							"emissiveFactor": [
+								0.0,
+								0.0,
+								0.0
+							],
+							"metallicFactor": 0.5,
+							"roughnessFactor": 0.45
+						},
+						"overlay": {
+							"baseColorFactor": [
+								0.14,
+								0.1,
+								0.06,
+								1.0
+							],
+							"emissiveFactor": [
+								0.0,
+								0.0,
+								0.0
+							],
+							"metallicFactor": 0.0,
+							"roughnessFactor": 0.95
+						}
+					}
+				},
+				"metallicFactor": 0.5,
+				"name": "Muddy Body Paint",
+				"roughnessFactor": 0.45,
+				"shader": {
+					"id": "adm.pbr.layered",
+					"version": "1.0.0"
+				},
+				"shaderParameters": {
+					"layer_factor": 0.2
+				}
+			}
+		],
+		"meshes": [
+			{
+				"name": "LayeredTestPlate",
+				"primitives": [
+					{
+						"attributes": {
+							"NORMAL": 1.0,
+							"POSITION": 0.0
+						},
+						"indices": 2.0,
+						"material": 0.0
+					}
+				]
+			}
+		],
+		"nodes": [
+			{
+				"mesh": 0.0,
+				"name": "Triangle"
+			}
+		],
+		"scene": 0.0,
+		"scenes": [
+			{
+				"nodes": [
+					0.0
+				]
+			}
+		]
+	},
+	"runtimeLimitations": [
+		"This milestone does not instantiate or render ADM files."
+	],
+	"runtimeStatus": "unsupported",
+	"source": "shader_layered.adm",
+	"specification": {
+		"commit": "0c6e9539c4e3b8cc7d8249ebed7bcfcfe12e9167",
+		"url": "https://github.com/BerretW/ADM/blob/main/adm-standard/ADM-1.0-SPEC.md",
+		"version": "ADM 1.0"
+	},
+	"status": "invalid",
+	"unsupported": []
+}

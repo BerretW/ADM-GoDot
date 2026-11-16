@@ -1,0 +1,347 @@
+{
+	"assetSha256": "2a764a9325644926a8c22469afab2474fb74c56988a03c9ffd71d59b9fc08ac9",
+	"capabilities": {
+		"declared": [
+			"extension:ADM_interactive_surfaces_v1",
+			"ADM-CORE-1",
+			"triangle-mesh-data",
+			"ADM-SHADER-CORE-1"
+		],
+		"implemented": [
+			"ADM-CONTAINER-1 (RAW chunks, header/directory/hash checks)",
+			"ADM-CORE-1 (metadata and structural validation subset)",
+			"ADM-ANIM-1 (container and library metadata validation subset)"
+		],
+		"notes": [
+			"Validation is partial; the diagnostic preview is not a full ADM renderer. Texture decoding, animation evaluation, and IK solving are unsupported."
+		]
+	},
+	"chunks": [
+		{
+			"codec": 0,
+			"id": 1,
+			"rawLength": 1488,
+			"required": true,
+			"sha256": "4366381bb341ea433337868cb7765bef6d8edd3463e71c0d1af2c0f5823fc17a",
+			"storedLength": 1488,
+			"type": "GEOM"
+		},
+		{
+			"codec": 0,
+			"id": 2,
+			"rawLength": 16516,
+			"required": true,
+			"sha256": "d5de9e9040174020c9cdd565630f3b8ebaf20e1383b9befc03a6ddf3556ec522",
+			"storedLength": 16516,
+			"type": "IMAG"
+		}
+	],
+	"declared_capabilities": [
+		"extension:ADM_interactive_surfaces_v1",
+		"ADM-CORE-1",
+		"triangle-mesh-data",
+		"ADM-SHADER-CORE-1"
+	],
+	"deviations": [],
+	"diagnostics": [
+		"Optional extension 'ADM_interactive_surfaces_v1' metadata is preserved but not interpreted."
+	],
+	"manifest": {
+		"accessors": [
+			{
+				"bufferView": 0.0,
+				"componentType": "F32",
+				"count": 24.0,
+				"type": "VEC3"
+			},
+			{
+				"bufferView": 1.0,
+				"componentType": "F32",
+				"count": 24.0,
+				"type": "VEC3"
+			},
+			{
+				"bufferView": 2.0,
+				"componentType": "F32",
+				"count": 24.0,
+				"type": "VEC2"
+			},
+			{
+				"bufferView": 3.0,
+				"componentType": "U16",
+				"count": 36.0,
+				"type": "SCALAR"
+			},
+			{
+				"bufferView": 4.0,
+				"componentType": "F32",
+				"count": 24.0,
+				"type": "VEC3"
+			},
+			{
+				"bufferView": 5.0,
+				"componentType": "F32",
+				"count": 24.0,
+				"type": "VEC3"
+			},
+			{
+				"bufferView": 6.0,
+				"componentType": "U16",
+				"count": 36.0,
+				"type": "SCALAR"
+			}
+		],
+		"asset": {
+			"generator": "ADM interactive terminal reference fixture 1.0.0 (Revision P13)"
+		},
+		"bufferViews": [
+			{
+				"byteLength": 288.0,
+				"byteOffset": 0.0,
+				"chunkId": 1.0
+			},
+			{
+				"byteLength": 288.0,
+				"byteOffset": 288.0,
+				"chunkId": 1.0
+			},
+			{
+				"byteLength": 192.0,
+				"byteOffset": 576.0,
+				"chunkId": 1.0
+			},
+			{
+				"byteLength": 72.0,
+				"byteOffset": 768.0,
+				"chunkId": 1.0
+			},
+			{
+				"byteLength": 288.0,
+				"byteOffset": 840.0,
+				"chunkId": 1.0
+			},
+			{
+				"byteLength": 288.0,
+				"byteOffset": 1128.0,
+				"chunkId": 1.0
+			},
+			{
+				"byteLength": 72.0,
+				"byteOffset": 1416.0,
+				"chunkId": 1.0
+			},
+			{
+				"byteLength": 16516.0,
+				"byteOffset": 0.0,
+				"chunkId": 2.0
+			}
+		],
+		"extensions": {
+			"ADM_interactive_surfaces_v1": {
+				"surfaces": [
+					{
+						"aspectRatio": 1.4583334,
+						"bindings": [
+							{
+								"node": 0.0,
+								"primitive": 0.0,
+								"texCoord": 0.0
+							}
+						],
+						"surfaceId": "main_display"
+					},
+					{
+						"aspectRatio": 1.4583334,
+						"bindings": [
+							{
+								"node": 1.0,
+								"primitive": 0.0,
+								"texCoord": 0.0
+							}
+						],
+						"surfaceId": "security_monitor_right"
+					}
+				],
+				"version": "1.0.0"
+			}
+		},
+		"extensionsUsed": [
+			"ADM_interactive_surfaces_v1"
+		],
+		"images": [
+			{
+				"bufferView": 7.0,
+				"mimeType": "image/png",
+				"name": "fallback_terminal_hud.png"
+			}
+		],
+		"materials": [
+			{
+				"alphaMode": "OPAQUE",
+				"baseColorFactor": [
+					0.14,
+					0.17,
+					0.22,
+					1.0
+				],
+				"emissiveFactor": [
+					0.0,
+					0.0,
+					0.0
+				],
+				"metallicFactor": 0.78,
+				"name": "frame",
+				"roughnessFactor": 0.32
+			},
+			{
+				"alphaMode": "BLEND",
+				"animationId": "screen_shared",
+				"baseColorFactor": [
+					0.35,
+					0.88,
+					1.0,
+					0.95
+				],
+				"baseColorTexture": {
+					"index": 0.0,
+					"texCoord": 0.0
+				},
+				"emissiveFactor": [
+					0.05,
+					0.18,
+					0.25
+				],
+				"metallicFactor": 0.0,
+				"name": "screen",
+				"roughnessFactor": 0.2,
+				"shader": {
+					"id": "adm.surface.interactive",
+					"version": "1.0.0"
+				},
+				"shaderParameters": {
+					"brightness": 1.6,
+					"emissive_strength": 0.8,
+					"enabled": true,
+					"unlit": true
+				}
+			}
+		],
+		"meshes": [
+			{
+				"name": "terminal_display",
+				"primitives": [
+					{
+						"attributes": {
+							"NORMAL": 1.0,
+							"POSITION": 0.0,
+							"TEXCOORD_0": 2.0
+						},
+						"indices": 3.0,
+						"material": 1.0
+					},
+					{
+						"attributes": {
+							"NORMAL": 5.0,
+							"POSITION": 4.0
+						},
+						"indices": 6.0,
+						"material": 0.0
+					}
+				]
+			}
+		],
+		"nodes": [
+			{
+				"mesh": 0.0,
+				"name": "display_unit",
+				"rotation": [
+					0.0,
+					0.12,
+					0.0,
+					0.99277389
+				],
+				"scale": [
+					1.0,
+					1.0,
+					1.0
+				],
+				"translation": [
+					-0.75,
+					0.0,
+					0.0
+				]
+			},
+			{
+				"mesh": 0.0,
+				"name": "display_unit",
+				"rotation": [
+					0.0,
+					-0.12,
+					0.0,
+					0.99277389
+				],
+				"scale": [
+					1.0,
+					1.0,
+					1.0
+				],
+				"translation": [
+					0.75,
+					0.0,
+					0.0
+				]
+			}
+		],
+		"scene": 0.0,
+		"scenes": [
+			{
+				"name": "InteractiveTerminalDualScene",
+				"nodes": [
+					0.0,
+					1.0
+				]
+			}
+		],
+		"textures": [
+			{
+				"source": 0.0
+			}
+		]
+	},
+	"preview": {
+		"boundsMax": [
+			1.34445190429688,
+			1.27999997138977,
+			0.189136758446693
+		],
+		"boundsMin": [
+			-1.34445190429688,
+			0.419999986886978,
+			-0.227984771132469
+		],
+		"diagnosticOverride": false,
+		"limitations": [
+			"Diagnostický náhled: statická geometrie, normály a základní barva; nejde o věrný PBR render.",
+			"Textury, shadery, vertex barvy, morph, skinning, animace, IK a kolize nejsou vykresleny.",
+			"Pokud normály chybí, jsou dopočítány pro náhled; nasvícení a průhlednost nejsou přesná implementace ADM."
+		],
+		"meshPrimitives": 4,
+		"status": "diagnostic_only",
+		"triangles": 48,
+		"vertices": 96
+	},
+	"runtimeLimitations": [
+		"Diagnostický náhled: statická geometrie, normály a základní barva; nejde o věrný PBR render.",
+		"Textury, shadery, vertex barvy, morph, skinning, animace, IK a kolize nejsou vykresleny.",
+		"Pokud normály chybí, jsou dopočítány pro náhled; nasvícení a průhlednost nejsou přesná implementace ADM."
+	],
+	"runtimeStatus": "unsupported",
+	"source": "interactive_terminal.adm",
+	"specification": {
+		"commit": "0c6e9539c4e3b8cc7d8249ebed7bcfcfe12e9167",
+		"url": "https://github.com/BerretW/ADM/blob/main/adm-standard/ADM-1.0-SPEC.md",
+		"version": "ADM 1.0"
+	},
+	"status": "supported",
+	"unsupported": []
+}

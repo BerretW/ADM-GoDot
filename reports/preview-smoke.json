@@ -1,0 +1,212 @@
+{
+	"engineVersion": "4.7.2-stable (official)",
+	"limitations": [
+		"Headless test checks decoded geometry and hierarchy, not rasterized pixels.",
+		"Diagnostic preview supports base color PNG/JPEG and selected sampler modes only; full PBR, skinning, morphs, animation and IK are unsupported.",
+		"Uploaded asset provenance is not established."
+	],
+	"reportType": "ADM diagnostic geometry preview smoke test",
+	"results": [
+		{
+			"actual": "preview",
+			"assetSha256": "f6796c23f49a4d58c7515014aa038206bd69f2497973d1ed74aa9f78c3704c87",
+			"diagnostic": false,
+			"expected": "preview",
+			"passed": true,
+			"preview": {
+				"boundsMax": [
+					1.0,
+					1.0,
+					0.0
+				],
+				"boundsMin": [
+					0.0,
+					0.0,
+					0.0
+				],
+				"diagnosticOverride": false,
+				"limitations": [
+					"Diagnostický náhled: statická geometrie a částečný materiálový fallback; nejde o úplný PBR render.",
+					"Pokročilé shadery, další texturové kanály, vertex barvy, morph, skinning, animace, IK a kolize nejsou vykresleny.",
+					"Pokud normály chybí, jsou dopočítány pro náhled; nasvícení a průhlednost nejsou přesná implementace ADM."
+				],
+				"materials": [
+					{
+						"baseColorTexture": "absent",
+						"materialIndex": -1,
+						"shaderFallbackActive": true,
+						"shaderId": "adm.pbr.metallic_roughness",
+						"shaderSupported": false,
+						"shaderVersion": "1.0.0"
+					}
+				],
+				"meshPrimitives": 1,
+				"status": "diagnostic_only",
+				"triangles": 1,
+				"vertices": 3
+			},
+			"source": "triangle.adm",
+			"validationStatus": "supported"
+		},
+		{
+			"actual": "preview",
+			"assetSha256": "2e3d901e294c1904ce1ee4911c264d29c7d4da46285891a2fc27404084233e01",
+			"diagnostic": false,
+			"expected": "preview",
+			"passed": true,
+			"preview": {
+				"boundsMax": [
+					0.899999976158142,
+					0.949999928474426,
+					0.0
+				],
+				"boundsMin": [
+					-0.899999976158142,
+					-0.600000023841858,
+					0.0
+				],
+				"diagnosticOverride": false,
+				"limitations": [
+					"Diagnostický náhled: statická geometrie a částečný materiálový fallback; nejde o úplný PBR render.",
+					"Pokročilé shadery, další texturové kanály, vertex barvy, morph, skinning, animace, IK a kolize nejsou vykresleny.",
+					"Pokud normály chybí, jsou dopočítány pro náhled; nasvícení a průhlednost nejsou přesná implementace ADM.",
+					"Shader adm.pbr.layered@1.0.0 není podporován; používá se neúplný PBR fallback."
+				],
+				"materials": [
+					{
+						"baseColorTexture": "absent",
+						"materialIndex": 0,
+						"shaderFallbackActive": true,
+						"shaderId": "adm.pbr.layered",
+						"shaderSupported": false,
+						"shaderVersion": "1.0.0"
+					}
+				],
+				"meshPrimitives": 1,
+				"status": "diagnostic_only",
+				"triangles": 1,
+				"vertices": 3
+			},
+			"source": "shader_layered.adm",
+			"validationStatus": "supported"
+		},
+		{
+			"actual": "blocked",
+			"assetSha256": "e5fde6daad368d4c38e35453594ffdeac04d28c8e079ea87bc3449768693f4b7",
+			"diagnostic": false,
+			"error": "Model vyžaduje nepodporované funkce. Pro neúplný náhled zapněte diagnostický režim.",
+			"expected": "blocked",
+			"passed": true,
+			"source": "humanoid.adm",
+			"validationStatus": "unsupported"
+		},
+		{
+			"actual": "preview",
+			"assetSha256": "e5fde6daad368d4c38e35453594ffdeac04d28c8e079ea87bc3449768693f4b7",
+			"diagnostic": true,
+			"expected": "preview",
+			"passed": true,
+			"preview": {
+				"boundsMax": [
+					0.850000143051147,
+					1.74000000953674,
+					0.159999996423721
+				],
+				"boundsMin": [
+					-0.850000023841858,
+					-0.00499999988824129,
+					-0.219999998807907
+				],
+				"diagnosticOverride": true,
+				"limitations": [
+					"Diagnostický náhled: statická geometrie a částečný materiálový fallback; nejde o úplný PBR render.",
+					"Pokročilé shadery, další texturové kanály, vertex barvy, morph, skinning, animace, IK a kolize nejsou vykresleny.",
+					"Pokud normály chybí, jsou dopočítány pro náhled; nasvícení a průhlednost nejsou přesná implementace ADM.",
+					"POZOR: povinná rozšíření nejsou podporována; model nebyl přijat jako kompatibilní.",
+					"Shader adm.vehicle.paint@1.0.0 není podporován; používá se neúplný PBR fallback.",
+					"Materiál 2: normalTexture zatím není vykreslen.",
+					"Materiál 2: emissiveFactor zatím není vykreslen.",
+					"Materiál 1: emissiveTexture zatím není vykreslen.",
+					"Materiál 1: emissiveFactor zatím není vykreslen.",
+					"Shader adm.pbr.layered@1.0.0 není podporován; používá se neúplný PBR fallback.",
+					"Materiál 0: metallicRoughnessTexture zatím není vykreslen.",
+					"Materiál 0: normalTexture zatím není vykreslen.",
+					"Materiál 0: occlusionTexture zatím není vykreslen."
+				],
+				"materials": [
+					{
+						"baseColorTexture": "png_jpeg",
+						"materialIndex": 2,
+						"shaderFallbackActive": true,
+						"shaderId": "adm.vehicle.paint",
+						"shaderSupported": false,
+						"shaderVersion": "1.0.0"
+					},
+					{
+						"baseColorTexture": "png_jpeg",
+						"materialIndex": 1,
+						"shaderFallbackActive": true,
+						"shaderId": "adm.pbr.metallic_roughness",
+						"shaderSupported": false,
+						"shaderVersion": "1.0.0"
+					},
+					{
+						"baseColorTexture": "png_jpeg",
+						"materialIndex": 0,
+						"shaderFallbackActive": true,
+						"shaderId": "adm.pbr.layered",
+						"shaderSupported": false,
+						"shaderVersion": "1.0.0"
+					}
+				],
+				"meshPrimitives": 23,
+				"status": "diagnostic_only",
+				"triangles": 276,
+				"vertices": 552
+			},
+			"source": "humanoid.adm",
+			"validationStatus": "unsupported"
+		},
+		{
+			"error": "Neplatná hierarchie: neexistující, opakovaný nebo cyklický uzel.",
+			"name": "cyclic_node_is_rejected",
+			"passed": true
+		},
+		{
+			"error": "Uzel 0: Index vrcholu 9 je mimo rozsah.",
+			"name": "invalid_vertex_index_is_rejected",
+			"passed": true
+		},
+		{
+			"details": "",
+			"name": "base_texture_image/png_uv_and_image",
+			"passed": true
+		},
+		{
+			"name": "missing_uv_rejected_image/png",
+			"passed": true
+		},
+		{
+			"name": "unsupported_sampler_reported_image/png",
+			"passed": true
+		},
+		{
+			"details": "",
+			"name": "base_texture_image/jpeg_uv_and_image",
+			"passed": true
+		},
+		{
+			"name": "missing_uv_rejected_image/jpeg",
+			"passed": true
+		},
+		{
+			"name": "unsupported_sampler_reported_image/jpeg",
+			"passed": true
+		}
+	],
+	"specification": {
+		"commit": "0c6e9539c4e3b8cc7d8249ebed7bcfcfe12e9167",
+		"url": "https://github.com/BerretW/ADM/blob/main/adm-standard/ADM-1.0-SPEC.md",
+		"version": "ADM 1.0"
+	}
+}

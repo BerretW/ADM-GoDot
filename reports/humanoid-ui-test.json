@@ -1,0 +1,133 @@
+{
+	"assetSha256": "e5fde6daad368d4c38e35453594ffdeac04d28c8e079ea87bc3449768693f4b7",
+	"capabilities": {
+		"declared": [
+			"required-extension:ADM_humanoid_sockets_v1",
+			"extension:ADM_material_layers_v1",
+			"extension:ADM_humanoid_sockets_v1",
+			"ADM-CORE-1",
+			"triangle-mesh-data",
+			"ADM-SHADER-CORE-1",
+			"skinning",
+			"ADM-IK-1"
+		],
+		"implemented": [
+			"ADM-CONTAINER-1 (RAW chunks, header/directory/hash checks)",
+			"ADM-CORE-1 (metadata and structural validation subset)",
+			"ADM-ANIM-1 (container and library metadata validation subset)"
+		],
+		"notes": [
+			"Validation is partial; the diagnostic preview is not a full ADM renderer. Texture decoding, animation evaluation, and IK solving are unsupported."
+		]
+	},
+	"deviations": [
+		"Required extension 'ADM_humanoid_sockets_v1' is not implemented by this validation milestone."
+	],
+	"engineVersion": "4.7.2-stable (official)",
+	"limitations": [
+		"Diagnostický náhled: statická geometrie a částečný materiálový fallback; nejde o úplný PBR render.",
+		"Pokročilé shadery, další texturové kanály, vertex barvy, morph, skinning, animace, IK a kolize nejsou vykresleny.",
+		"Pokud normály chybí, jsou dopočítány pro náhled; nasvícení a průhlednost nejsou přesná implementace ADM.",
+		"POZOR: povinná rozšíření nejsou podporována; model nebyl přijat jako kompatibilní.",
+		"Shader adm.vehicle.paint@1.0.0 není podporován; používá se neúplný PBR fallback.",
+		"Materiál 2: normalTexture zatím není vykreslen.",
+		"Materiál 2: emissiveFactor zatím není vykreslen.",
+		"Materiál 1: emissiveTexture zatím není vykreslen.",
+		"Materiál 1: emissiveFactor zatím není vykreslen.",
+		"Shader adm.pbr.layered@1.0.0 není podporován; používá se neúplný PBR fallback.",
+		"Materiál 0: metallicRoughnessTexture zatím není vykreslen.",
+		"Materiál 0: normalTexture zatím není vykreslen.",
+		"Materiál 0: occlusionTexture zatím není vykreslen."
+	],
+	"preview": {
+		"boundsMax": [
+			0.850000143051147,
+			1.74000000953674,
+			0.159999996423721
+		],
+		"boundsMin": [
+			-0.850000023841858,
+			-0.00499999988824129,
+			-0.219999998807907
+		],
+		"diagnosticOverride": true,
+		"limitations": [
+			"Diagnostický náhled: statická geometrie a částečný materiálový fallback; nejde o úplný PBR render.",
+			"Pokročilé shadery, další texturové kanály, vertex barvy, morph, skinning, animace, IK a kolize nejsou vykresleny.",
+			"Pokud normály chybí, jsou dopočítány pro náhled; nasvícení a průhlednost nejsou přesná implementace ADM.",
+			"POZOR: povinná rozšíření nejsou podporována; model nebyl přijat jako kompatibilní.",
+			"Shader adm.vehicle.paint@1.0.0 není podporován; používá se neúplný PBR fallback.",
+			"Materiál 2: normalTexture zatím není vykreslen.",
+			"Materiál 2: emissiveFactor zatím není vykreslen.",
+			"Materiál 1: emissiveTexture zatím není vykreslen.",
+			"Materiál 1: emissiveFactor zatím není vykreslen.",
+			"Shader adm.pbr.layered@1.0.0 není podporován; používá se neúplný PBR fallback.",
+			"Materiál 0: metallicRoughnessTexture zatím není vykreslen.",
+			"Materiál 0: normalTexture zatím není vykreslen.",
+			"Materiál 0: occlusionTexture zatím není vykreslen."
+		],
+		"materials": [
+			{
+				"baseColorTexture": "png_jpeg",
+				"materialIndex": 2,
+				"shaderFallbackActive": true,
+				"shaderId": "adm.vehicle.paint",
+				"shaderSupported": false,
+				"shaderVersion": "1.0.0"
+			},
+			{
+				"baseColorTexture": "png_jpeg",
+				"materialIndex": 1,
+				"shaderFallbackActive": true,
+				"shaderId": "adm.pbr.metallic_roughness",
+				"shaderSupported": false,
+				"shaderVersion": "1.0.0"
+			},
+			{
+				"baseColorTexture": "png_jpeg",
+				"materialIndex": 0,
+				"shaderFallbackActive": true,
+				"shaderId": "adm.pbr.layered",
+				"shaderSupported": false,
+				"shaderVersion": "1.0.0"
+			}
+		],
+		"meshPrimitives": 23,
+		"status": "diagnostic_only",
+		"triangles": 276,
+		"vertices": 552
+	},
+	"reportType": "Humanoid diagnostic preview UI test",
+	"results": [
+		{
+			"name": "default_diagnostic_preview",
+			"passed": true
+		},
+		{
+			"name": "unsupported_warning",
+			"passed": true
+		},
+		{
+			"name": "disable_then_enable_reloads",
+			"passed": true
+		},
+		{
+			"name": "base_color_textures_and_partial_fallback",
+			"passed": true,
+			"texturedMaterials": 3
+		},
+		{
+			"name": "rendered_foreground",
+			"passed": true,
+			"sampleCount": 1363
+		}
+	],
+	"runtimeStatus": "unsupported",
+	"screenshot": "humanoid-preview.png",
+	"specification": {
+		"commit": "0c6e9539c4e3b8cc7d8249ebed7bcfcfe12e9167",
+		"url": "https://github.com/BerretW/ADM/blob/main/adm-standard/ADM-1.0-SPEC.md",
+		"version": "ADM 1.0"
+	},
+	"validationStatus": "unsupported"
+}

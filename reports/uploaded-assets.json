@@ -1,0 +1,363 @@
+{
+	"assetProvenance": "User-supplied local files; upstream commit is not established.",
+	"engineVersion": "4.7.2-stable (official)",
+	"limitations": [
+		"Subset checks do not establish full ADM validity or conformance.",
+		"Extension data is preserved, not interpreted; required extensions remain unsupported.",
+		"Rendering, texture decoding, animation evaluation and IK are not implemented."
+	],
+	"reportType": "Uploaded ADM assets: validation subset",
+	"results": [
+		{
+			"assetSha256": "511ee25ba11d51ecad0ad69a8ba53246f22bde1a0916a68080c251d9212d21f7",
+			"capabilities": {
+				"declared": [
+					"ADM-CORE-1",
+					"triangle-mesh-data",
+					"ADM-SHADER-CORE-1",
+					"skinning",
+					"ADM-IK-1"
+				],
+				"implemented": [
+					"ADM-CONTAINER-1 (RAW chunks, header/directory/hash checks)",
+					"ADM-CORE-1 (metadata and structural validation subset)",
+					"ADM-ANIM-1 (container and library metadata validation subset)"
+				],
+				"notes": [
+					"Validation is partial; the diagnostic preview is not a full ADM renderer. Texture decoding, animation evaluation, and IK solving are unsupported."
+				]
+			},
+			"deviations": [],
+			"diagnostics": [],
+			"expectedSubsetStatus": null,
+			"runtimeStatus": "unsupported",
+			"source": "animal_canine_quadruped.adm",
+			"status": "supported",
+			"unsupported": []
+		},
+		{
+			"assetSha256": "8ac2e2136aaa24cda3bbe1ce7fbfa60c5714bcd0e3544f7b3eb88e59180b8e08",
+			"capabilities": {
+				"declared": [
+					"ADM-CORE-1",
+					"triangle-mesh-data",
+					"ADM-SHADER-CORE-1"
+				],
+				"implemented": [
+					"ADM-CONTAINER-1 (RAW chunks, header/directory/hash checks)",
+					"ADM-CORE-1 (metadata and structural validation subset)",
+					"ADM-ANIM-1 (container and library metadata validation subset)"
+				],
+				"notes": [
+					"Validation is partial; the diagnostic preview is not a full ADM renderer. Texture decoding, animation evaluation, and IK solving are unsupported."
+				]
+			},
+			"deviations": [],
+			"diagnostics": [],
+			"expectedSubsetStatus": null,
+			"runtimeStatus": "unsupported",
+			"source": "core20_shaders.adm",
+			"status": "supported",
+			"unsupported": []
+		},
+		{
+			"assetSha256": "e5fde6daad368d4c38e35453594ffdeac04d28c8e079ea87bc3449768693f4b7",
+			"capabilities": {
+				"declared": [
+					"required-extension:ADM_humanoid_sockets_v1",
+					"extension:ADM_material_layers_v1",
+					"extension:ADM_humanoid_sockets_v1",
+					"ADM-CORE-1",
+					"triangle-mesh-data",
+					"ADM-SHADER-CORE-1",
+					"skinning",
+					"ADM-IK-1"
+				],
+				"implemented": [
+					"ADM-CONTAINER-1 (RAW chunks, header/directory/hash checks)",
+					"ADM-CORE-1 (metadata and structural validation subset)",
+					"ADM-ANIM-1 (container and library metadata validation subset)"
+				],
+				"notes": [
+					"Validation is partial; the diagnostic preview is not a full ADM renderer. Texture decoding, animation evaluation, and IK solving are unsupported."
+				]
+			},
+			"deviations": [
+				"Required extension 'ADM_humanoid_sockets_v1' is not implemented by this validation milestone."
+			],
+			"diagnostics": [
+				"Optional extension 'ADM_material_layers_v1' metadata is preserved but not interpreted."
+			],
+			"expectedSubsetStatus": "unsupported",
+			"runtimeStatus": "unsupported",
+			"source": "humanoid.adm",
+			"status": "unsupported",
+			"unsupported": [
+				"Required extension 'ADM_humanoid_sockets_v1' is not implemented by this validation milestone."
+			]
+		},
+		{
+			"assetSha256": "9512391aacb7026eeeddff30e4eded5396bfae41801b2b74a2de07d4aa78b3a6",
+			"capabilities": {
+				"declared": [
+					"required-extension:ADM_vertex_control_v1",
+					"extension:ADM_interactive_surfaces_v1",
+					"extension:ADM_vertex_control_v1",
+					"ADM-CORE-1",
+					"triangle-mesh-data",
+					"ADM-SHADER-CORE-1"
+				],
+				"implemented": [
+					"ADM-CONTAINER-1 (RAW chunks, header/directory/hash checks)",
+					"ADM-CORE-1 (metadata and structural validation subset)",
+					"ADM-ANIM-1 (container and library metadata validation subset)"
+				],
+				"notes": [
+					"Validation is partial; the diagnostic preview is not a full ADM renderer. Texture decoding, animation evaluation, and IK solving are unsupported."
+				]
+			},
+			"deviations": [
+				"Required extension 'ADM_vertex_control_v1' is not implemented by this validation milestone."
+			],
+			"diagnostics": [
+				"Optional extension 'ADM_interactive_surfaces_v1' metadata is preserved but not interpreted."
+			],
+			"expectedSubsetStatus": null,
+			"runtimeStatus": "unsupported",
+			"source": "interactive_control_deck.adm",
+			"status": "unsupported",
+			"unsupported": [
+				"Required extension 'ADM_vertex_control_v1' is not implemented by this validation milestone."
+			]
+		},
+		{
+			"assetSha256": "2a764a9325644926a8c22469afab2474fb74c56988a03c9ffd71d59b9fc08ac9",
+			"capabilities": {
+				"declared": [
+					"extension:ADM_interactive_surfaces_v1",
+					"ADM-CORE-1",
+					"triangle-mesh-data",
+					"ADM-SHADER-CORE-1"
+				],
+				"implemented": [
+					"ADM-CONTAINER-1 (RAW chunks, header/directory/hash checks)",
+					"ADM-CORE-1 (metadata and structural validation subset)",
+					"ADM-ANIM-1 (container and library metadata validation subset)"
+				],
+				"notes": [
+					"Validation is partial; the diagnostic preview is not a full ADM renderer. Texture decoding, animation evaluation, and IK solving are unsupported."
+				]
+			},
+			"deviations": [],
+			"diagnostics": [
+				"Optional extension 'ADM_interactive_surfaces_v1' metadata is preserved but not interpreted."
+			],
+			"expectedSubsetStatus": null,
+			"runtimeStatus": "unsupported",
+			"source": "interactive_terminal.adm",
+			"status": "supported",
+			"unsupported": []
+		},
+		{
+			"assetSha256": "8d48a862a83ec5abcba707d02503b869290be886bda8e1488b3bd28233e346ea",
+			"capabilities": {
+				"declared": [
+					"required-extension:ADM_vertex_control_v1",
+					"required-extension:ADM_physical_surfaces_v1",
+					"extension:ADM_vertex_control_v1",
+					"extension:ADM_physical_surfaces_v1",
+					"ADM-CORE-1",
+					"triangle-mesh-data",
+					"ADM-SHADER-CORE-1"
+				],
+				"implemented": [
+					"ADM-CONTAINER-1 (RAW chunks, header/directory/hash checks)",
+					"ADM-CORE-1 (metadata and structural validation subset)",
+					"ADM-ANIM-1 (container and library metadata validation subset)"
+				],
+				"notes": [
+					"Validation is partial; the diagnostic preview is not a full ADM renderer. Texture decoding, animation evaluation, and IK solving are unsupported."
+				]
+			},
+			"deviations": [
+				"Required extension 'ADM_vertex_control_v1' is not implemented by this validation milestone.",
+				"Required extension 'ADM_physical_surfaces_v1' is not implemented by this validation milestone."
+			],
+			"diagnostics": [],
+			"expectedSubsetStatus": null,
+			"runtimeStatus": "unsupported",
+			"source": "p10_extensions.adm",
+			"status": "unsupported",
+			"unsupported": [
+				"Required extension 'ADM_vertex_control_v1' is not implemented by this validation milestone.",
+				"Required extension 'ADM_physical_surfaces_v1' is not implemented by this validation milestone."
+			]
+		},
+		{
+			"assetSha256": "2e3d901e294c1904ce1ee4911c264d29c7d4da46285891a2fc27404084233e01",
+			"capabilities": {
+				"declared": [
+					"extension:ADM_material_layers_v1",
+					"ADM-CORE-1",
+					"triangle-mesh-data",
+					"ADM-SHADER-CORE-1"
+				],
+				"implemented": [
+					"ADM-CONTAINER-1 (RAW chunks, header/directory/hash checks)",
+					"ADM-CORE-1 (metadata and structural validation subset)",
+					"ADM-ANIM-1 (container and library metadata validation subset)"
+				],
+				"notes": [
+					"Validation is partial; the diagnostic preview is not a full ADM renderer. Texture decoding, animation evaluation, and IK solving are unsupported."
+				]
+			},
+			"deviations": [],
+			"diagnostics": [
+				"Optional extension 'ADM_material_layers_v1' metadata is preserved but not interpreted."
+			],
+			"expectedSubsetStatus": "supported",
+			"runtimeStatus": "unsupported",
+			"source": "shader_layered.adm",
+			"status": "supported",
+			"unsupported": []
+		},
+		{
+			"assetSha256": "6a5898db67b2b13e7828911f1aa978e76f1e63d9873df597fac476bb588380f1",
+			"capabilities": {
+				"declared": [
+					"ADM-CORE-1",
+					"triangle-mesh-data",
+					"ADM-SHADER-CORE-1"
+				],
+				"implemented": [
+					"ADM-CONTAINER-1 (RAW chunks, header/directory/hash checks)",
+					"ADM-CORE-1 (metadata and structural validation subset)",
+					"ADM-ANIM-1 (container and library metadata validation subset)"
+				],
+				"notes": [
+					"Validation is partial; the diagnostic preview is not a full ADM renderer. Texture decoding, animation evaluation, and IK solving are unsupported."
+				]
+			},
+			"deviations": [],
+			"diagnostics": [],
+			"expectedSubsetStatus": null,
+			"runtimeStatus": "unsupported",
+			"source": "slots.adm",
+			"status": "supported",
+			"unsupported": []
+		},
+		{
+			"assetSha256": "96826b4b4ccd03778f228fe355355a09a4f98b74e8d8cd477b5b2dec37b5026a",
+			"capabilities": {
+				"declared": [
+					"required-extension:ADM_vertex_control_v1",
+					"extension:ADM_vertex_control_v1",
+					"ADM-CORE-1",
+					"triangle-mesh-data",
+					"ADM-SHADER-CORE-1"
+				],
+				"implemented": [
+					"ADM-CONTAINER-1 (RAW chunks, header/directory/hash checks)",
+					"ADM-CORE-1 (metadata and structural validation subset)",
+					"ADM-ANIM-1 (container and library metadata validation subset)"
+				],
+				"notes": [
+					"Validation is partial; the diagnostic preview is not a full ADM renderer. Texture decoding, animation evaluation, and IK solving are unsupported."
+				]
+			},
+			"deviations": [
+				"Required extension 'ADM_vertex_control_v1' is not implemented by this validation milestone."
+			],
+			"diagnostics": [],
+			"expectedSubsetStatus": null,
+			"runtimeStatus": "unsupported",
+			"source": "terrain_four_layer_v2.adm",
+			"status": "unsupported",
+			"unsupported": [
+				"Required extension 'ADM_vertex_control_v1' is not implemented by this validation milestone."
+			]
+		},
+		{
+			"assetSha256": "f6796c23f49a4d58c7515014aa038206bd69f2497973d1ed74aa9f78c3704c87",
+			"capabilities": {
+				"declared": [
+					"ADM-CORE-1",
+					"triangle-mesh-data"
+				],
+				"implemented": [
+					"ADM-CONTAINER-1 (RAW chunks, header/directory/hash checks)",
+					"ADM-CORE-1 (metadata and structural validation subset)",
+					"ADM-ANIM-1 (container and library metadata validation subset)"
+				],
+				"notes": [
+					"Validation is partial; the diagnostic preview is not a full ADM renderer. Texture decoding, animation evaluation, and IK solving are unsupported."
+				]
+			},
+			"deviations": [],
+			"diagnostics": [],
+			"expectedSubsetStatus": "supported",
+			"runtimeStatus": "unsupported",
+			"source": "triangle.adm",
+			"status": "supported",
+			"unsupported": []
+		},
+		{
+			"assetSha256": "8e361e9ef565615173741a186bd80da375674b21fc6fd4c054ff74ab3bead9d4",
+			"capabilities": {
+				"declared": [
+					"extension:ADM_material_layers_v1",
+					"ADM-CORE-1",
+					"triangle-mesh-data",
+					"ADM-SHADER-CORE-1"
+				],
+				"implemented": [
+					"ADM-CONTAINER-1 (RAW chunks, header/directory/hash checks)",
+					"ADM-CORE-1 (metadata and structural validation subset)",
+					"ADM-ANIM-1 (container and library metadata validation subset)"
+				],
+				"notes": [
+					"Validation is partial; the diagnostic preview is not a full ADM renderer. Texture decoding, animation evaluation, and IK solving are unsupported."
+				]
+			},
+			"deviations": [],
+			"diagnostics": [
+				"Optional extension 'ADM_material_layers_v1' metadata is preserved but not interpreted."
+			],
+			"expectedSubsetStatus": null,
+			"runtimeStatus": "unsupported",
+			"source": "vehicle_car_minimal.adm",
+			"status": "supported",
+			"unsupported": []
+		},
+		{
+			"assetSha256": "0c5fca02172fdcad3e17307fcc7c4fed39fea0c59e8b32399810b98dc6f1da92",
+			"capabilities": {
+				"declared": [
+					"ADM-CORE-1",
+					"triangle-mesh-data",
+					"ADM-SHADER-CORE-1"
+				],
+				"implemented": [
+					"ADM-CONTAINER-1 (RAW chunks, header/directory/hash checks)",
+					"ADM-CORE-1 (metadata and structural validation subset)",
+					"ADM-ANIM-1 (container and library metadata validation subset)"
+				],
+				"notes": [
+					"Validation is partial; the diagnostic preview is not a full ADM renderer. Texture decoding, animation evaluation, and IK solving are unsupported."
+				]
+			},
+			"deviations": [],
+			"diagnostics": [],
+			"expectedSubsetStatus": null,
+			"runtimeStatus": "unsupported",
+			"source": "weapon_firearm_minimal.adm",
+			"status": "supported",
+			"unsupported": []
+		}
+	],
+	"specification": {
+		"commit": "0c6e9539c4e3b8cc7d8249ebed7bcfcfe12e9167",
+		"url": "https://github.com/BerretW/ADM/blob/main/adm-standard/ADM-1.0-SPEC.md",
+		"version": "ADM 1.0"
+	}
+}

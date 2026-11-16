@@ -1,0 +1,774 @@
+{
+	"assetSha256": "0c5fca02172fdcad3e17307fcc7c4fed39fea0c59e8b32399810b98dc6f1da92",
+	"capabilities": {
+		"declared": [
+			"ADM-CORE-1",
+			"triangle-mesh-data",
+			"ADM-SHADER-CORE-1"
+		],
+		"implemented": [
+			"ADM-CONTAINER-1 (RAW chunks, header/directory/hash checks)",
+			"ADM-CORE-1 (metadata and structural validation subset)",
+			"ADM-ANIM-1 (container and library metadata validation subset)"
+		],
+		"notes": [
+			"Validation is partial; the diagnostic preview is not a full ADM renderer. Texture decoding, animation evaluation, and IK solving are unsupported."
+		]
+	},
+	"chunks": [
+		{
+			"codec": 0,
+			"id": 1,
+			"rawLength": 8640,
+			"required": true,
+			"sha256": "ab8e36e667594384691c9f371b5cfb87f159212531dbae7e5867b20ed6c174fb",
+			"storedLength": 8640,
+			"type": "GEOM"
+		},
+		{
+			"codec": 0,
+			"id": 2,
+			"rawLength": 49548,
+			"required": true,
+			"sha256": "c9f7e60fdfce4949a83f6603fc8641e6ec50216b35fb2f720e5eb4a25a34280b",
+			"storedLength": 49548,
+			"type": "IMAG"
+		}
+	],
+	"declared_capabilities": [
+		"ADM-CORE-1",
+		"triangle-mesh-data",
+		"ADM-SHADER-CORE-1"
+	],
+	"deviations": [],
+	"diagnostics": [],
+	"manifest": {
+		"accessors": [
+			{
+				"bufferView": 0.0,
+				"componentType": "F32",
+				"count": 24.0,
+				"type": "VEC3"
+			},
+			{
+				"bufferView": 1.0,
+				"componentType": "F32",
+				"count": 24.0,
+				"type": "VEC3"
+			},
+			{
+				"bufferView": 2.0,
+				"componentType": "F32",
+				"count": 24.0,
+				"type": "VEC4"
+			},
+			{
+				"bufferView": 3.0,
+				"componentType": "F32",
+				"count": 24.0,
+				"type": "VEC2"
+			},
+			{
+				"bufferView": 4.0,
+				"componentType": "U16",
+				"count": 36.0,
+				"type": "SCALAR"
+			},
+			{
+				"bufferView": 5.0,
+				"componentType": "F32",
+				"count": 24.0,
+				"type": "VEC3"
+			},
+			{
+				"bufferView": 6.0,
+				"componentType": "F32",
+				"count": 24.0,
+				"type": "VEC3"
+			},
+			{
+				"bufferView": 7.0,
+				"componentType": "F32",
+				"count": 24.0,
+				"type": "VEC4"
+			},
+			{
+				"bufferView": 8.0,
+				"componentType": "F32",
+				"count": 24.0,
+				"type": "VEC2"
+			},
+			{
+				"bufferView": 9.0,
+				"componentType": "U16",
+				"count": 36.0,
+				"type": "SCALAR"
+			},
+			{
+				"bufferView": 10.0,
+				"componentType": "F32",
+				"count": 70.0,
+				"type": "VEC3"
+			},
+			{
+				"bufferView": 11.0,
+				"componentType": "F32",
+				"count": 70.0,
+				"type": "VEC3"
+			},
+			{
+				"bufferView": 12.0,
+				"componentType": "F32",
+				"count": 70.0,
+				"type": "VEC4"
+			},
+			{
+				"bufferView": 13.0,
+				"componentType": "F32",
+				"count": 70.0,
+				"type": "VEC2"
+			},
+			{
+				"bufferView": 14.0,
+				"componentType": "U16",
+				"count": 192.0,
+				"type": "SCALAR"
+			},
+			{
+				"bufferView": 15.0,
+				"componentType": "F32",
+				"count": 24.0,
+				"type": "VEC3"
+			},
+			{
+				"bufferView": 16.0,
+				"componentType": "F32",
+				"count": 24.0,
+				"type": "VEC3"
+			},
+			{
+				"bufferView": 17.0,
+				"componentType": "F32",
+				"count": 24.0,
+				"type": "VEC4"
+			},
+			{
+				"bufferView": 18.0,
+				"componentType": "F32",
+				"count": 24.0,
+				"type": "VEC2"
+			},
+			{
+				"bufferView": 19.0,
+				"componentType": "U16",
+				"count": 36.0,
+				"type": "SCALAR"
+			},
+			{
+				"bufferView": 20.0,
+				"componentType": "F32",
+				"count": 24.0,
+				"type": "VEC3"
+			},
+			{
+				"bufferView": 21.0,
+				"componentType": "F32",
+				"count": 24.0,
+				"type": "VEC3"
+			},
+			{
+				"bufferView": 22.0,
+				"componentType": "F32",
+				"count": 24.0,
+				"type": "VEC4"
+			},
+			{
+				"bufferView": 23.0,
+				"componentType": "F32",
+				"count": 24.0,
+				"type": "VEC2"
+			},
+			{
+				"bufferView": 24.0,
+				"componentType": "U16",
+				"count": 36.0,
+				"type": "SCALAR"
+			}
+		],
+		"asset": {
+			"generator": "ADM Profile P1 fixtures (weapon.firearm.v1)"
+		},
+		"attachments": [
+			{
+				"name": "mount.magazine",
+				"node": 4.0
+			}
+		],
+		"bufferViews": [
+			{
+				"byteLength": 288.0,
+				"byteOffset": 0.0,
+				"chunkId": 1.0
+			},
+			{
+				"byteLength": 288.0,
+				"byteOffset": 288.0,
+				"chunkId": 1.0
+			},
+			{
+				"byteLength": 384.0,
+				"byteOffset": 576.0,
+				"chunkId": 1.0
+			},
+			{
+				"byteLength": 192.0,
+				"byteOffset": 960.0,
+				"chunkId": 1.0
+			},
+			{
+				"byteLength": 72.0,
+				"byteOffset": 1152.0,
+				"chunkId": 1.0
+			},
+			{
+				"byteLength": 288.0,
+				"byteOffset": 1224.0,
+				"chunkId": 1.0
+			},
+			{
+				"byteLength": 288.0,
+				"byteOffset": 1512.0,
+				"chunkId": 1.0
+			},
+			{
+				"byteLength": 384.0,
+				"byteOffset": 1800.0,
+				"chunkId": 1.0
+			},
+			{
+				"byteLength": 192.0,
+				"byteOffset": 2184.0,
+				"chunkId": 1.0
+			},
+			{
+				"byteLength": 72.0,
+				"byteOffset": 2376.0,
+				"chunkId": 1.0
+			},
+			{
+				"byteLength": 840.0,
+				"byteOffset": 2448.0,
+				"chunkId": 1.0
+			},
+			{
+				"byteLength": 840.0,
+				"byteOffset": 3288.0,
+				"chunkId": 1.0
+			},
+			{
+				"byteLength": 1120.0,
+				"byteOffset": 4128.0,
+				"chunkId": 1.0
+			},
+			{
+				"byteLength": 560.0,
+				"byteOffset": 5248.0,
+				"chunkId": 1.0
+			},
+			{
+				"byteLength": 384.0,
+				"byteOffset": 5808.0,
+				"chunkId": 1.0
+			},
+			{
+				"byteLength": 288.0,
+				"byteOffset": 6192.0,
+				"chunkId": 1.0
+			},
+			{
+				"byteLength": 288.0,
+				"byteOffset": 6480.0,
+				"chunkId": 1.0
+			},
+			{
+				"byteLength": 384.0,
+				"byteOffset": 6768.0,
+				"chunkId": 1.0
+			},
+			{
+				"byteLength": 192.0,
+				"byteOffset": 7152.0,
+				"chunkId": 1.0
+			},
+			{
+				"byteLength": 72.0,
+				"byteOffset": 7344.0,
+				"chunkId": 1.0
+			},
+			{
+				"byteLength": 288.0,
+				"byteOffset": 7416.0,
+				"chunkId": 1.0
+			},
+			{
+				"byteLength": 288.0,
+				"byteOffset": 7704.0,
+				"chunkId": 1.0
+			},
+			{
+				"byteLength": 384.0,
+				"byteOffset": 7992.0,
+				"chunkId": 1.0
+			},
+			{
+				"byteLength": 192.0,
+				"byteOffset": 8376.0,
+				"chunkId": 1.0
+			},
+			{
+				"byteLength": 72.0,
+				"byteOffset": 8568.0,
+				"chunkId": 1.0
+			},
+			{
+				"byteLength": 16516.0,
+				"byteOffset": 0.0,
+				"chunkId": 2.0
+			},
+			{
+				"byteLength": 16516.0,
+				"byteOffset": 16516.0,
+				"chunkId": 2.0
+			},
+			{
+				"byteLength": 16516.0,
+				"byteOffset": 33032.0,
+				"chunkId": 2.0
+			}
+		],
+		"colliders": [
+			{
+				"node": 0.0,
+				"physicalMaterial": "ordnance_steel",
+				"shape": "BOX",
+				"size": [
+					0.14,
+					0.25,
+					0.95
+				]
+			}
+		],
+		"componentRoles": [
+			{
+				"node": 0.0,
+				"profile": "weapon.firearm.v1",
+				"role": "weapon.receiver"
+			},
+			{
+				"node": 1.0,
+				"profile": "weapon.firearm.v1",
+				"role": "weapon.muzzle"
+			},
+			{
+				"node": 2.0,
+				"profile": "weapon.firearm.v1",
+				"role": "weapon.magazine"
+			},
+			{
+				"node": 3.0,
+				"profile": "weapon.firearm.v1",
+				"role": "weapon.bolt"
+			}
+		],
+		"hitboxes": [
+			{
+				"boneNode": 0.0,
+				"collider": 0.0,
+				"id": "hb_weapon_body",
+				"role": "weapon_frame"
+			}
+		],
+		"images": [
+			{
+				"bufferView": 25.0,
+				"mimeType": "image/png",
+				"name": "receiver_albedo.png"
+			},
+			{
+				"bufferView": 26.0,
+				"mimeType": "image/png",
+				"name": "ordnance_mr.png"
+			},
+			{
+				"bufferView": 27.0,
+				"mimeType": "image/png",
+				"name": "receiver_normal.png"
+			}
+		],
+		"materials": [
+			{
+				"alphaMode": "OPAQUE",
+				"animationId": "receiver_steel",
+				"baseColorFactor": [
+					0.85,
+					0.9,
+					0.95,
+					1.0
+				],
+				"baseColorTexture": {
+					"index": 0.0,
+					"texCoord": 0.0
+				},
+				"emissiveFactor": [
+					0.0,
+					0.0,
+					0.0
+				],
+				"metallicFactor": 0.88,
+				"metallicRoughnessTexture": {
+					"index": 1.0,
+					"texCoord": 0.0
+				},
+				"name": "Blued Ordinance Steel (Textured)",
+				"normalTexture": {
+					"index": 2.0,
+					"scale": 0.75,
+					"texCoord": 0.0
+				},
+				"roughnessFactor": 0.32
+			},
+			{
+				"alphaMode": "OPAQUE",
+				"animationId": "polymer_furniture",
+				"baseColorFactor": [
+					0.18,
+					0.2,
+					0.19,
+					1.0
+				],
+				"emissiveFactor": [
+					0.0,
+					0.0,
+					0.0
+				],
+				"metallicFactor": 0.12,
+				"name": "Tactical Matte Polymer",
+				"normalTexture": {
+					"index": 2.0,
+					"scale": 0.5,
+					"texCoord": 0.0
+				},
+				"roughnessFactor": 0.76
+			},
+			{
+				"alphaMode": "OPAQUE",
+				"animationId": "bolt_carrier",
+				"baseColorFactor": [
+					0.75,
+					0.78,
+					0.82,
+					1.0
+				],
+				"emissiveFactor": [
+					0.0,
+					0.0,
+					0.0
+				],
+				"metallicFactor": 0.95,
+				"name": "Chrome Bolt Carrier",
+				"roughnessFactor": 0.16
+			}
+		],
+		"meshes": [
+			{
+				"name": "ReceiverMesh",
+				"primitives": [
+					{
+						"attributes": {
+							"NORMAL": 1.0,
+							"POSITION": 0.0,
+							"TANGENT": 2.0,
+							"TEXCOORD_0": 3.0
+						},
+						"indices": 4.0,
+						"material": 0.0
+					},
+					{
+						"attributes": {
+							"NORMAL": 6.0,
+							"POSITION": 5.0,
+							"TANGENT": 7.0,
+							"TEXCOORD_0": 8.0
+						},
+						"indices": 9.0,
+						"material": 1.0
+					}
+				]
+			},
+			{
+				"name": "BarrelMesh",
+				"primitives": [
+					{
+						"attributes": {
+							"NORMAL": 11.0,
+							"POSITION": 10.0,
+							"TANGENT": 12.0,
+							"TEXCOORD_0": 13.0
+						},
+						"indices": 14.0,
+						"material": 0.0
+					}
+				]
+			},
+			{
+				"name": "DetachableMagazineMesh",
+				"primitives": [
+					{
+						"attributes": {
+							"NORMAL": 16.0,
+							"POSITION": 15.0,
+							"TANGENT": 17.0,
+							"TEXCOORD_0": 18.0
+						},
+						"indices": 19.0,
+						"material": 1.0
+					}
+				]
+			},
+			{
+				"name": "BoltCarrierMesh",
+				"primitives": [
+					{
+						"attributes": {
+							"NORMAL": 21.0,
+							"POSITION": 20.0,
+							"TANGENT": 22.0,
+							"TEXCOORD_0": 23.0
+						},
+						"indices": 24.0,
+						"material": 2.0
+					}
+				]
+			}
+		],
+		"modelComponents": [
+			{
+				"id": "magazine.detachable",
+				"node": 2.0,
+				"role": "weapon.magazine",
+				"socket": "mount.magazine"
+			},
+			{
+				"id": "bolt.carrier",
+				"node": 3.0,
+				"role": "weapon.bolt"
+			}
+		],
+		"modelProfiles": [
+			{
+				"id": "weapon.firearm.v1",
+				"metadata": {
+					"articulations": [
+						{
+							"allowed": "TRANSLATION",
+							"role": "weapon.bolt",
+							"translationAxis": "Z",
+							"translationMax": 0.02,
+							"translationMin": -0.06
+						}
+					],
+					"feedType": "DETACHABLE_MAGAZINE",
+					"mounts": [
+						{
+							"class": "magazine.v1",
+							"interface": "adm.magazine_box.v1",
+							"socket": "mount.magazine"
+						}
+					]
+				},
+				"schemaVersion": 1.0
+			}
+		],
+		"nodes": [
+			{
+				"children": [
+					1.0,
+					2.0,
+					3.0,
+					4.0
+				],
+				"mesh": 0.0,
+				"name": "Weapon_Receiver",
+				"rotation": [
+					0.0,
+					0.0,
+					0.0,
+					1.0
+				],
+				"scale": [
+					1.0,
+					1.0,
+					1.0
+				],
+				"translation": [
+					0.0,
+					0.35,
+					0.2
+				]
+			},
+			{
+				"mesh": 1.0,
+				"name": "Weapon_Muzzle",
+				"rotation": [
+					0.0,
+					0.0,
+					0.0,
+					1.0
+				],
+				"scale": [
+					1.0,
+					1.0,
+					1.0
+				],
+				"translation": [
+					0.0,
+					0.02,
+					-0.8
+				]
+			},
+			{
+				"mesh": 2.0,
+				"name": "Weapon_Magazine",
+				"rotation": [
+					0.0,
+					0.0,
+					0.0,
+					1.0
+				],
+				"scale": [
+					1.0,
+					1.0,
+					1.0
+				],
+				"translation": [
+					0.0,
+					-0.12,
+					0.0
+				]
+			},
+			{
+				"mesh": 3.0,
+				"name": "Weapon_Bolt",
+				"rotation": [
+					0.0,
+					0.0,
+					0.0,
+					1.0
+				],
+				"scale": [
+					1.0,
+					1.0,
+					1.0
+				],
+				"translation": [
+					0.0,
+					0.0,
+					-0.2
+				]
+			},
+			{
+				"name": "Socket_Magazine_Mount",
+				"rotation": [
+					0.0,
+					0.0,
+					0.0,
+					1.0
+				],
+				"scale": [
+					1.0,
+					1.0,
+					1.0
+				],
+				"translation": [
+					0.0,
+					-0.1,
+					-0.15
+				]
+			}
+		],
+		"physicalMaterials": [
+			{
+				"friction": 0.35,
+				"id": "ordnance_steel",
+				"restitution": 0.15
+			}
+		],
+		"samplers": [
+			{
+				"magFilter": "LINEAR",
+				"minFilter": "LINEAR",
+				"wrapS": "REPEAT",
+				"wrapT": "REPEAT"
+			}
+		],
+		"scene": 0.0,
+		"scenes": [
+			{
+				"name": "WeaponScene",
+				"nodes": [
+					0.0
+				]
+			}
+		],
+		"textures": [
+			{
+				"sampler": 0.0,
+				"source": 0.0
+			},
+			{
+				"sampler": 0.0,
+				"source": 1.0
+			},
+			{
+				"sampler": 0.0,
+				"source": 2.0
+			}
+		]
+	},
+	"preview": {
+		"boundsMax": [
+			0.067500002682209,
+			0.449999958276749,
+			0.375
+		],
+		"boundsMin": [
+			-0.067500002682209,
+			-0.070000022649765,
+			-0.875
+		],
+		"diagnosticOverride": false,
+		"limitations": [
+			"Diagnostický náhled: statická geometrie, normály a základní barva; nejde o věrný PBR render.",
+			"Textury, shadery, vertex barvy, morph, skinning, animace, IK a kolize nejsou vykresleny.",
+			"Pokud normály chybí, jsou dopočítány pro náhled; nasvícení a průhlednost nejsou přesná implementace ADM."
+		],
+		"meshPrimitives": 5,
+		"status": "diagnostic_only",
+		"triangles": 112,
+		"vertices": 166
+	},
+	"runtimeLimitations": [
+		"Diagnostický náhled: statická geometrie, normály a základní barva; nejde o věrný PBR render.",
+		"Textury, shadery, vertex barvy, morph, skinning, animace, IK a kolize nejsou vykresleny.",
+		"Pokud normály chybí, jsou dopočítány pro náhled; nasvícení a průhlednost nejsou přesná implementace ADM."
+	],
+	"runtimeStatus": "unsupported",
+	"source": "weapon_firearm_minimal.adm",
+	"specification": {
+		"commit": "0c6e9539c4e3b8cc7d8249ebed7bcfcfe12e9167",
+		"url": "https://github.com/BerretW/ADM/blob/main/adm-standard/ADM-1.0-SPEC.md",
+		"version": "ADM 1.0"
+	},
+	"status": "supported",
+	"unsupported": []
+}

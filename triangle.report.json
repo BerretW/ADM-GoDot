@@ -1,0 +1,103 @@
+{
+	"assetSha256": "f6796c23f49a4d58c7515014aa038206bd69f2497973d1ed74aa9f78c3704c87",
+	"capabilities": {
+		"declared": [
+			"ADM-CORE-1",
+			"triangle-mesh-data"
+		],
+		"implemented": [
+			"ADM-CONTAINER-1 (RAW chunks, header/directory/hash checks)",
+			"ADM-CORE-1 (metadata and structural validation subset)",
+			"ADM-ANIM-1 (container and library metadata validation subset)"
+		],
+		"notes": [
+			"No rendering, texture decoding, animation evaluation, or IK solving in this milestone."
+		]
+	},
+	"chunks": [
+		{
+			"codec": 0,
+			"id": 1,
+			"rawLength": 42,
+			"required": true,
+			"sha256": "da6a558d6b6af65846b717b81d06857d17a419ab4ba29b78e34dd7326cf0f1d6",
+			"storedLength": 42,
+			"type": "GEOM"
+		}
+	],
+	"declared_capabilities": [
+		"ADM-CORE-1",
+		"triangle-mesh-data"
+	],
+	"deviations": [],
+	"diagnostics": [],
+	"manifest": {
+		"accessors": [
+			{
+				"bufferView": 0.0,
+				"componentType": "F32",
+				"count": 3.0,
+				"type": "VEC3"
+			},
+			{
+				"bufferView": 1.0,
+				"componentType": "U16",
+				"count": 3.0,
+				"type": "SCALAR"
+			}
+		],
+		"asset": {
+			"generator": "ADM reference fixture 1.0"
+		},
+		"bufferViews": [
+			{
+				"byteLength": 36.0,
+				"byteOffset": 0.0,
+				"chunkId": 1.0
+			},
+			{
+				"byteLength": 6.0,
+				"byteOffset": 36.0,
+				"chunkId": 1.0
+			}
+		],
+		"meshes": [
+			{
+				"primitives": [
+					{
+						"attributes": {
+							"POSITION": 0.0
+						},
+						"indices": 1.0
+					}
+				]
+			}
+		],
+		"nodes": [
+			{
+				"mesh": 0.0,
+				"name": "Triangle"
+			}
+		],
+		"scene": 0.0,
+		"scenes": [
+			{
+				"nodes": [
+					0.0
+				]
+			}
+		]
+	},
+	"runtimeLimitations": [
+		"This milestone validates ADM data but does not instantiate or render it."
+	],
+	"runtimeStatus": "unsupported",
+	"source": "triangle.adm",
+	"specification": {
+		"commit": "0c6e9539c4e3b8cc7d8249ebed7bcfcfe12e9167",
+		"url": "https://github.com/BerretW/ADM/blob/main/adm-standard/ADM-1.0-SPEC.md",
+		"version": "ADM 1.0"
+	},
+	"status": "supported",
+	"unsupported": []
+}

@@ -1,0 +1,140 @@
+{
+	"capabilities": [
+		"ADM-CONTAINER-1 (RAW chunks, header/directory/hash checks)",
+		"ADM-CORE-1 (metadata and structural validation subset)",
+		"ADM-ANIM-1 (container and library metadata validation subset)"
+	],
+	"deviations": [
+		"Validation covers a documented subset of ADM 1.0; it is not a conformance claim.",
+		"Smoke tests use synthetic fixtures; the separate uploaded-assets report covers the user-supplied files."
+	],
+	"engineVersion": "Godot 4.7.2-stable",
+	"limitations": [
+		"Cross-engine reference provenance and independently verified conformance are not established.",
+		"Rendering, texture/image decoding, animation evaluation, and IK solving are not implemented.",
+		"Full per-feature schema validation and JSON integer lexical-form checks are not yet implemented."
+	],
+	"reportType": "ADM validation milestone smoke test",
+	"results": [
+		{
+			"actual": "supported",
+			"assetSha256": "9dc0ace0cf24576fe0cfd14bcbd589579d521d4a71869a9a46d7b559a071a334",
+			"diagnostics": [],
+			"expected": "supported",
+			"name": "valid_metadata_only_animation",
+			"passed": true,
+			"unsupported": []
+		},
+		{
+			"actual": "supported",
+			"assetSha256": "4d7cff3beb83eb19722c2c57c40c213c6f0f25e1c8c75a712e0c8718ed83ecb1",
+			"diagnostics": [],
+			"expected": "supported",
+			"name": "valid_raw_data_chunk_and_hash",
+			"passed": true,
+			"unsupported": []
+		},
+		{
+			"actual": "supported",
+			"assetSha256": "d8f5eb874dcd5ed1c16fccb51963dadb424d92f764d3c2417266fc338ce5820b",
+			"diagnostics": [],
+			"expected": "supported",
+			"name": "valid_unpadded_raw_chunk",
+			"passed": true,
+			"unsupported": []
+		},
+		{
+			"actual": "unsupported",
+			"assetSha256": "86cce89ea39cc8b5da937946171c7e2d9acfbe4bca4cc0019e207a5a5d0e7018",
+			"diagnostics": [],
+			"expected": "unsupported",
+			"name": "unknown_required_chunk",
+			"passed": true,
+			"unsupported": [
+				"ADM_ERR_UNSUPPORTED_CHUNK: unknown required chunk type FUTR."
+			]
+		},
+		{
+			"actual": "invalid",
+			"assetSha256": "cb26ad9513bbb2648835c7289b232e698d2d014d00c44d94105bcd82d013f449",
+			"diagnostics": [
+				"SHA-256 mismatch for chunk 1."
+			],
+			"expected": "invalid",
+			"name": "raw_chunk_hash_mismatch",
+			"passed": true,
+			"unsupported": []
+		},
+		{
+			"actual": "supported",
+			"assetSha256": "57847eddf5cac0a8a25c1295ff302c759258d22a3285d8e3b3593713c77a431c",
+			"diagnostics": [
+				"Optional extension 'ADM_future_optional' metadata is preserved but not interpreted."
+			],
+			"expected": "supported",
+			"name": "unknown_optional_extension",
+			"passed": true,
+			"unsupported": []
+		},
+		{
+			"actual": "supported",
+			"assetSha256": "2b18a0fa51e9facadb43331787d949c1f39c52cfd6ddc58d154b8cf1cc2da0d5",
+			"diagnostics": [
+				"Optional extension 'ADM_future_optional' metadata is preserved but not interpreted."
+			],
+			"expected": "supported",
+			"name": "nested_optional_extension",
+			"passed": true,
+			"unsupported": []
+		},
+		{
+			"actual": "supported",
+			"assetSha256": "b09e4078d75843b6c489bfc14ead6cfd8cd81a129232c22b3a79c272ccaf9f65",
+			"diagnostics": [
+				"Optional extension 'ADM_future_optional' metadata is preserved but not interpreted."
+			],
+			"expected": "supported",
+			"name": "declaration_without_root_extension_data",
+			"passed": true,
+			"unsupported": []
+		},
+		{
+			"actual": "unsupported",
+			"assetSha256": "9ebb1f3b7c18245887c5674260ca54adcc3deaa06a22471d5b6c821b9d422cd9",
+			"diagnostics": [],
+			"expected": "unsupported",
+			"name": "unknown_required_extension",
+			"passed": true,
+			"unsupported": [
+				"Required extension 'ADM_future_required' is not implemented by this validation milestone."
+			]
+		},
+		{
+			"actual": "invalid",
+			"assetSha256": "defb17a35f25664059794666035d4c995586db21417a9424c5ed979cdcb1fe45",
+			"diagnostics": [
+				"Manifest contains duplicate JSON object key 'clips'."
+			],
+			"expected": "invalid",
+			"name": "duplicate_json_member",
+			"passed": true,
+			"unsupported": []
+		},
+		{
+			"actual": "unsupported",
+			"assetSha256": "e2d254139cfb5ffa76cd8b7a6459b239590f638cdda4ebd1ba5f61e2ecb17170",
+			"diagnostics": [],
+			"expected": "unsupported",
+			"name": "unsupported_major_version",
+			"passed": true,
+			"unsupported": [
+				"ADM version 2.0 is not supported; expected 1.0."
+			]
+		}
+	],
+	"specification": {
+		"commit": "0c6e9539c4e3b8cc7d8249ebed7bcfcfe12e9167",
+		"url": "https://github.com/BerretW/ADM/blob/main/adm-standard/ADM-1.0-SPEC.md",
+		"version": "ADM 1.0"
+	}
+}

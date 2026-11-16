@@ -1,0 +1,554 @@
+{
+	"assetSha256": "8ac2e2136aaa24cda3bbe1ce7fbfa60c5714bcd0e3544f7b3eb88e59180b8e08",
+	"capabilities": {
+		"declared": [
+			"ADM-CORE-1",
+			"triangle-mesh-data",
+			"ADM-SHADER-CORE-1"
+		],
+		"implemented": [
+			"ADM-CONTAINER-1 (RAW chunks, header/directory/hash checks)",
+			"ADM-CORE-1 (metadata and structural validation subset)",
+			"ADM-ANIM-1 (container and library metadata validation subset)"
+		],
+		"notes": [
+			"Validation is partial; the diagnostic preview is not a full ADM renderer. Texture decoding, animation evaluation, and IK solving are unsupported."
+		]
+	},
+	"chunks": [
+		{
+			"codec": 0,
+			"id": 1,
+			"rawLength": 7920,
+			"required": true,
+			"sha256": "20fa015c829357d774b49ba9ec64f80792736604575031a4cdb29c45ed38b127",
+			"storedLength": 7920,
+			"type": "GEOM"
+		},
+		{
+			"codec": 0,
+			"id": 2,
+			"rawLength": 49548,
+			"required": true,
+			"sha256": "11bd6a5ff27f02ceb29f6e5f072bca68b00c9dd1b45996d67dd57744d8594abe",
+			"storedLength": 49548,
+			"type": "IMAG"
+		}
+	],
+	"declared_capabilities": [
+		"ADM-CORE-1",
+		"triangle-mesh-data",
+		"ADM-SHADER-CORE-1"
+	],
+	"deviations": [],
+	"diagnostics": [],
+	"manifest": {
+		"accessors": [
+			{
+				"bufferView": 0.0,
+				"componentType": "F32",
+				"count": 24.0,
+				"type": "VEC3"
+			},
+			{
+				"bufferView": 1.0,
+				"componentType": "F32",
+				"count": 24.0,
+				"type": "VEC3"
+			},
+			{
+				"bufferView": 2.0,
+				"componentType": "F32",
+				"count": 24.0,
+				"type": "VEC4"
+			},
+			{
+				"bufferView": 3.0,
+				"componentType": "F32",
+				"count": 24.0,
+				"type": "VEC2"
+			},
+			{
+				"bufferView": 4.0,
+				"componentType": "U16",
+				"count": 36.0,
+				"type": "SCALAR"
+			},
+			{
+				"bufferView": 5.0,
+				"componentType": "F32",
+				"count": 102.0,
+				"type": "VEC3"
+			},
+			{
+				"bufferView": 6.0,
+				"componentType": "F32",
+				"count": 102.0,
+				"type": "VEC3"
+			},
+			{
+				"bufferView": 7.0,
+				"componentType": "F32",
+				"count": 102.0,
+				"type": "VEC4"
+			},
+			{
+				"bufferView": 8.0,
+				"componentType": "F32",
+				"count": 102.0,
+				"type": "VEC2"
+			},
+			{
+				"bufferView": 9.0,
+				"componentType": "U16",
+				"count": 288.0,
+				"type": "SCALAR"
+			},
+			{
+				"bufferView": 10.0,
+				"componentType": "F32",
+				"count": 24.0,
+				"type": "VEC3"
+			},
+			{
+				"bufferView": 11.0,
+				"componentType": "F32",
+				"count": 24.0,
+				"type": "VEC3"
+			},
+			{
+				"bufferView": 12.0,
+				"componentType": "F32",
+				"count": 24.0,
+				"type": "VEC4"
+			},
+			{
+				"bufferView": 13.0,
+				"componentType": "F32",
+				"count": 24.0,
+				"type": "VEC2"
+			},
+			{
+				"bufferView": 14.0,
+				"componentType": "U16",
+				"count": 36.0,
+				"type": "SCALAR"
+			}
+		],
+		"asset": {
+			"generator": "ADM 1.0 Core 20 Shader Registry Showcase (Revisions P5–P9)"
+		},
+		"bufferViews": [
+			{
+				"byteLength": 288.0,
+				"byteOffset": 0.0,
+				"chunkId": 1.0
+			},
+			{
+				"byteLength": 288.0,
+				"byteOffset": 288.0,
+				"chunkId": 1.0
+			},
+			{
+				"byteLength": 384.0,
+				"byteOffset": 576.0,
+				"chunkId": 1.0
+			},
+			{
+				"byteLength": 192.0,
+				"byteOffset": 960.0,
+				"chunkId": 1.0
+			},
+			{
+				"byteLength": 72.0,
+				"byteOffset": 1152.0,
+				"chunkId": 1.0
+			},
+			{
+				"byteLength": 1224.0,
+				"byteOffset": 1224.0,
+				"chunkId": 1.0
+			},
+			{
+				"byteLength": 1224.0,
+				"byteOffset": 2448.0,
+				"chunkId": 1.0
+			},
+			{
+				"byteLength": 1632.0,
+				"byteOffset": 3672.0,
+				"chunkId": 1.0
+			},
+			{
+				"byteLength": 816.0,
+				"byteOffset": 5304.0,
+				"chunkId": 1.0
+			},
+			{
+				"byteLength": 576.0,
+				"byteOffset": 6120.0,
+				"chunkId": 1.0
+			},
+			{
+				"byteLength": 288.0,
+				"byteOffset": 6696.0,
+				"chunkId": 1.0
+			},
+			{
+				"byteLength": 288.0,
+				"byteOffset": 6984.0,
+				"chunkId": 1.0
+			},
+			{
+				"byteLength": 384.0,
+				"byteOffset": 7272.0,
+				"chunkId": 1.0
+			},
+			{
+				"byteLength": 192.0,
+				"byteOffset": 7656.0,
+				"chunkId": 1.0
+			},
+			{
+				"byteLength": 72.0,
+				"byteOffset": 7848.0,
+				"chunkId": 1.0
+			},
+			{
+				"byteLength": 16516.0,
+				"byteOffset": 0.0,
+				"chunkId": 2.0
+			},
+			{
+				"byteLength": 16516.0,
+				"byteOffset": 16516.0,
+				"chunkId": 2.0
+			},
+			{
+				"byteLength": 16516.0,
+				"byteOffset": 33032.0,
+				"chunkId": 2.0
+			}
+		],
+		"images": [
+			{
+				"bufferView": 15.0,
+				"mimeType": "image/png",
+				"name": "running_bond_mortar_mask.png"
+			},
+			{
+				"bufferView": 16.0,
+				"mimeType": "image/png",
+				"name": "metallic_paint_albedo.png"
+			},
+			{
+				"bufferView": 17.0,
+				"mimeType": "image/png",
+				"name": "surface_normal_ripple.png"
+			}
+		],
+		"materials": [
+			{
+				"alphaMode": "OPAQUE",
+				"animationId": "brick_masonry",
+				"baseColorFactor": [
+					0.68,
+					0.24,
+					0.16,
+					1.0
+				],
+				"baseColorTexture": {
+					"index": 0.0,
+					"texCoord": 0.0
+				},
+				"emissiveFactor": [
+					0.0,
+					0.0,
+					0.0
+				],
+				"metallicFactor": 0.0,
+				"name": "Brick Masonry (adm.building.brick@1.0.0)",
+				"roughnessFactor": 0.76,
+				"shader": {
+					"id": "adm.building.brick",
+					"version": "1.0.0"
+				},
+				"shaderParameters": {
+					"brick_roughness": 0.72,
+					"mortar_color": [
+						0.62,
+						0.6,
+						0.56
+					],
+					"mortar_mask": {
+						"index": 0.0,
+						"texCoord": 0.0
+					},
+					"mortar_roughness": 0.92,
+					"uv_scale": [
+						1.5,
+						1.5
+					]
+				}
+			},
+			{
+				"alphaMode": "OPAQUE",
+				"animationId": "car_paint_coat",
+				"baseColorFactor": [
+					0.15,
+					0.45,
+					0.88,
+					1.0
+				],
+				"baseColorTexture": {
+					"index": 1.0,
+					"texCoord": 0.0
+				},
+				"emissiveFactor": [
+					0.0,
+					0.0,
+					0.0
+				],
+				"metallicFactor": 0.85,
+				"name": "Car Clearcoat Paint (adm.vehicle.paint@1.0.0)",
+				"roughnessFactor": 0.26,
+				"shader": {
+					"id": "adm.vehicle.paint",
+					"version": "1.0.0"
+				},
+				"shaderParameters": {
+					"clearcoat": 0.75,
+					"clearcoat_roughness": 0.08,
+					"edge_tint": [
+						1.0,
+						0.78,
+						0.35
+					],
+					"edge_tint_strength": 0.28
+				}
+			},
+			{
+				"alphaMode": "BLEND",
+				"animationId": "water_surface",
+				"baseColorFactor": [
+					0.1,
+					0.42,
+					0.62,
+					0.85
+				],
+				"baseColorTexture": {
+					"index": 2.0,
+					"texCoord": 0.0
+				},
+				"emissiveFactor": [
+					0.01,
+					0.05,
+					0.08
+				],
+				"metallicFactor": 0.1,
+				"name": "Animated Water Surface (adm.nature.water@1.0.0)",
+				"normalTexture": {
+					"index": 2.0,
+					"scale": 0.65,
+					"texCoord": 0.0
+				},
+				"roughnessFactor": 0.12,
+				"shader": {
+					"id": "adm.nature.water",
+					"version": "1.0.0"
+				},
+				"shaderParameters": {
+					"ior": 1.333,
+					"transparency": 0.72,
+					"uv_velocity": [
+						0.35,
+						0.2
+					],
+					"water_tint": [
+						0.06,
+						0.38,
+						0.56
+					]
+				}
+			}
+		],
+		"meshes": [
+			{
+				"name": "BrickWallMesh",
+				"primitives": [
+					{
+						"attributes": {
+							"NORMAL": 1.0,
+							"POSITION": 0.0,
+							"TANGENT": 2.0,
+							"TEXCOORD_0": 3.0
+						},
+						"indices": 4.0,
+						"material": 0.0
+					}
+				]
+			},
+			{
+				"name": "VehiclePaintMesh",
+				"primitives": [
+					{
+						"attributes": {
+							"NORMAL": 6.0,
+							"POSITION": 5.0,
+							"TANGENT": 7.0,
+							"TEXCOORD_0": 8.0
+						},
+						"indices": 9.0,
+						"material": 1.0
+					}
+				]
+			},
+			{
+				"name": "WaterBasinMesh",
+				"primitives": [
+					{
+						"attributes": {
+							"NORMAL": 11.0,
+							"POSITION": 10.0,
+							"TANGENT": 12.0,
+							"TEXCOORD_0": 13.0
+						},
+						"indices": 14.0,
+						"material": 2.0
+					}
+				]
+			}
+		],
+		"nodes": [
+			{
+				"mesh": 0.0,
+				"name": "Wall_Brick_ShaderProfile",
+				"rotation": [
+					0.0,
+					0.0,
+					0.0,
+					1.0
+				],
+				"scale": [
+					1.0,
+					1.0,
+					1.0
+				],
+				"translation": [
+					-1.3,
+					0.0,
+					0.0
+				]
+			},
+			{
+				"mesh": 1.0,
+				"name": "Pillar_VehiclePaint_Clearcoat",
+				"rotation": [
+					0.0,
+					0.0,
+					0.0,
+					1.0
+				],
+				"scale": [
+					1.0,
+					1.0,
+					1.0
+				],
+				"translation": [
+					0.0,
+					0.58,
+					0.0
+				]
+			},
+			{
+				"mesh": 2.0,
+				"name": "Basin_Water_SchlickFresnel",
+				"rotation": [
+					0.0,
+					0.0,
+					0.0,
+					1.0
+				],
+				"scale": [
+					1.0,
+					1.0,
+					1.0
+				],
+				"translation": [
+					1.3,
+					0.0,
+					0.0
+				]
+			}
+		],
+		"samplers": [
+			{
+				"magFilter": "LINEAR",
+				"minFilter": "LINEAR",
+				"wrapS": "REPEAT",
+				"wrapT": "REPEAT"
+			}
+		],
+		"scene": 0.0,
+		"scenes": [
+			{
+				"name": "Core20ShadersScene",
+				"nodes": [
+					0.0,
+					1.0,
+					2.0
+				]
+			}
+		],
+		"textures": [
+			{
+				"sampler": 0.0,
+				"source": 0.0
+			},
+			{
+				"sampler": 0.0,
+				"source": 1.0
+			},
+			{
+				"sampler": 0.0,
+				"source": 2.0
+			}
+		]
+	},
+	"preview": {
+		"boundsMax": [
+			1.77499997615814,
+			1.15499997138977,
+			0.474999994039536
+		],
+		"boundsMin": [
+			-1.77499997615814,
+			0.00499999523162842,
+			-0.474999994039536
+		],
+		"diagnosticOverride": false,
+		"limitations": [
+			"Diagnostický náhled: statická geometrie, normály a základní barva; nejde o věrný PBR render.",
+			"Textury, shadery, vertex barvy, morph, skinning, animace, IK a kolize nejsou vykresleny.",
+			"Pokud normály chybí, jsou dopočítány pro náhled; nasvícení a průhlednost nejsou přesná implementace ADM."
+		],
+		"meshPrimitives": 3,
+		"status": "diagnostic_only",
+		"triangles": 120,
+		"vertices": 150
+	},
+	"runtimeLimitations": [
+		"Diagnostický náhled: statická geometrie, normály a základní barva; nejde o věrný PBR render.",
+		"Textury, shadery, vertex barvy, morph, skinning, animace, IK a kolize nejsou vykresleny.",
+		"Pokud normály chybí, jsou dopočítány pro náhled; nasvícení a průhlednost nejsou přesná implementace ADM."
+	],
+	"runtimeStatus": "unsupported",
+	"source": "core20_shaders.adm",
+	"specification": {
+		"commit": "0c6e9539c4e3b8cc7d8249ebed7bcfcfe12e9167",
+		"url": "https://github.com/BerretW/ADM/blob/main/adm-standard/ADM-1.0-SPEC.md",
+		"version": "ADM 1.0"
+	},
+	"status": "supported",
+	"unsupported": []
+}
