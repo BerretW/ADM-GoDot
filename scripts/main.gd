@@ -8,6 +8,7 @@ var save_dialog: FileDialog
 var output: RichTextLabel
 var selected_report: Dictionary = {}
 var diagnostic_toggle: CheckBox
+var joint_display_toggle: CheckBox
 var viewport_container: SubViewportContainer
 var viewport: SubViewport
 var model_root: Node3D
@@ -61,6 +62,11 @@ func _build_ui() -> void:
 	diagnostic_toggle.button_pressed = true
 	diagnostic_toggle.toggled.connect(_diagnostic_toggled)
 	controls.add_child(diagnostic_toggle)
+	joint_display_toggle = CheckBox.new()
+	joint_display_toggle.text = "Zobrazit rámce kloubů"
+	joint_display_toggle.tooltip_text = "Autorská data kloubů v klidové póze; nikoli animace nebo skinning."
+	joint_display_toggle.toggled.connect(_joint_display_toggled)
+	controls.add_child(joint_display_toggle)
 
 	preview_status = Label.new()
 	preview_status.text = "Diagnostický náhled: neúplný, bez animací; není potvrzením kompatibility."
@@ -138,6 +144,7 @@ func _inspect_file(path: String) -> void:
 	selected_report = loaded.get("report", {})
 	if loaded.has("root"):
 		model_root.add_child(loaded.root)
+		_joint_display_toggled(joint_display_toggle.button_pressed)
 		var bounds: AABB = loaded.bounds
 		camera_target = bounds.get_center()
 		var radius: float = max(bounds.size.length() * 0.5, 0.05)
@@ -186,11 +193,26 @@ func _inspect_file(path: String) -> void:
 			output.append_text("\nPrimitiv: %d, vrcholů: %d, trojúhelníků: %d\n" % [
 				selected_report.preview.meshPrimitives, selected_report.preview.vertices, selected_report.preview.triangles
 			])
+			if selected_report.preview.jointDisplay.count > 0:
+				output.append_text("Autorských rámců kloubů ve scéně: %d (pouze klidová póza).\n" % selected_report.preview.jointDisplay.count)
+			else:
+				output.append_text("Autorská data zobrazení kloubů nejsou ve výchozí scéně dostupná; tvary nejsou odvozovány.\n")
 
 
 func _diagnostic_toggled(_enabled: bool) -> void:
 	if not selected_path.is_empty():
 		_inspect_file(selected_path)
+
+
+func _joint_display_toggled(enabled: bool) -> void:
+	for child in model_root.get_children():
+		if child.is_queued_for_deletion():
+			continue
+		var joint_lines := child.get_node_or_null("ADMJointDisplay") as MeshInstance3D
+		if joint_lines != null:
+			joint_lines.visible = enabled
+	if selected_report.has("preview") and selected_report.preview.has("jointDisplay"):
+		selected_report.preview.jointDisplay.visible = enabled and selected_report.preview.jointDisplay.count > 0
 
 
 func _save_report() -> void:

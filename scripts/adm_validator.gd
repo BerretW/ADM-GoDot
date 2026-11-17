@@ -1,8 +1,8 @@
 extends RefCounted
 class_name ADMValidator
 
-const SPEC_SHA := "0c6e9539c4e3b8cc7d8249ebed7bcfcfe12e9167"
-const SPEC_URL := "https://github.com/BerretW/ADM/blob/main/adm-standard/ADM-1.0-SPEC.md"
+const SPEC_SHA := "0fe5ac81683584683a6d83b40bf779d6d219cde5"
+const SPEC_URL := "https://github.com/BerretW/ADM/blob/0fe5ac81683584683a6d83b40bf779d6d219cde5/adm-standard/ADM-1.0-SPEC.md"
 const HEADER_SIZE := 64
 const DIRECTORY_ENTRY_SIZE := 80
 const MAX_FILE_SIZE := 1073741824
@@ -24,7 +24,7 @@ const ANIM_OPTIONAL := [
 ]
 const KNOWN_CHUNK_TYPES := ["GEOM", "ANIM", "IMAG", "DATA"]
 const IMPLEMENTED_CAPABILITIES := [
-	"ADM-CONTAINER-1 (RAW chunks, header/directory/hash checks)",
+	"ADM-CONTAINER-1 (partial: RAW chunks, header/directory/hash and dependency checks; no streaming)",
 	"ADM-CORE-1 (metadata and structural validation subset)",
 	"ADM-ANIM-1 (container and library metadata validation subset)"
 ]
@@ -284,16 +284,20 @@ static func _validate_manifest(manifest: Dictionary, magic: String, bytes: Packe
 	var view_error := _validate_views(manifest.bufferViews, chunk_by_id)
 	if not view_error.is_empty():
 		return view_error
+	for view in manifest.bufferViews:
+		chunk_by_id[int(view.chunkId)].referenced = true
+	var dependency_error := _validate_chunk_metadata(manifest, chunk_by_id)
+	if not dependency_error.is_empty():
+		return dependency_error
 	var accessor_error := _validate_accessors(manifest.accessors, manifest.bufferViews, chunk_by_id, bytes)
 	if not accessor_error.is_empty():
 		return accessor_error
-	for view in manifest.bufferViews:
-		chunk_by_id[int(view.chunkId)].referenced = true
 	for chunk in chunks:
-		if not KNOWN_CHUNK_TYPES.has(chunk.type) and chunk.required:
-			return "ADM_ERR_UNSUPPORTED_CHUNK: unknown required chunk type %s." % chunk.type
-		if not KNOWN_CHUNK_TYPES.has(chunk.type) and not chunk.referenced:
-			_add_diagnostic(result, "Unknown optional unreferenced chunk type %s was ignored." % chunk.type)
+		if not KNOWN_CHUNK_TYPES.has(chunk.type):
+			if chunk.required or chunk.referenced:
+				_add_unsupported(result, "ADM_ERR_UNSUPPORTED_CHUNK: needed chunk %d has unknown type %s." % [chunk.id, chunk.type])
+			else:
+				_add_diagnostic(result, "Unknown optional unreferenced chunk type %s was ignored." % chunk.type)
 		if chunk.codec != 0 and chunk.required and not chunk.referenced:
 			_add_unsupported(result, "Required chunk %d uses unavailable codec %d." % [chunk.id, chunk.codec])
 	if is_model:
@@ -317,6 +321,85 @@ static func _validate_manifest(manifest: Dictionary, magic: String, bytes: Packe
 				if typeof(channel) == TYPE_DICTIONARY and typeof(channel.get("target", null)) == TYPE_DICTIONARY:
 					var channel_kind: String = str(channel.target.get("kind", "unknown"))
 					_add_all_unique(result.declared_capabilities, ["animation-target:" + channel_kind])
+	return ""
+
+
+static func _validate_chunk_metadata(manifest: Dictionary, chunks: Dictionary) -> String:
+	var dependencies := {}
+	var incoming := {}
+	for chunk_id in chunks:
+		incoming[chunk_id] = 0
+	for index in range(manifest.get("chunkDependencies", []).size()):
+		var entry: Variant = manifest.chunkDependencies[index]
+		if typeof(entry) != TYPE_DICTIONARY or entry.size() != 2 or not entry.has("chunkId") or not entry.has("requires") or typeof(entry.requires) != TYPE_ARRAY:
+			return "chunkDependencies[%d] must contain only chunkId and a requires array." % index
+		if not _is_uint(entry.chunkId) or not chunks.has(int(entry.chunkId)):
+			return "chunkDependencies[%d] references an unknown chunkId." % index
+		var chunk_id := int(entry.chunkId)
+		if dependencies.has(chunk_id):
+			return "chunkDependencies contains duplicate chunkId %d." % chunk_id
+		var requires: Array = []
+		var seen := {}
+		for value in entry.requires:
+			if not _is_uint(value) or not chunks.has(int(value)) or int(value) == chunk_id or seen.has(int(value)):
+				return "chunkDependencies[%d] contains an invalid, duplicate, or self dependency." % index
+			var required_id := int(value)
+			seen[required_id] = true
+			requires.append(required_id)
+			incoming[required_id] += 1
+		dependencies[chunk_id] = requires
+
+	var ready: Array = []
+	for chunk_id in incoming:
+		if incoming[chunk_id] == 0:
+			ready.append(chunk_id)
+	var cursor := 0
+	while cursor < ready.size():
+		var chunk_id: int = ready[cursor]
+		cursor += 1
+		for required_id in dependencies.get(chunk_id, []):
+			incoming[required_id] -= 1
+			if incoming[required_id] == 0:
+				ready.append(required_id)
+	if ready.size() != chunks.size():
+		return "chunkDependencies contains a cycle."
+
+	ready.reverse()
+	for chunk_id in ready:
+		var available := true
+		for required_id in dependencies.get(chunk_id, []):
+			var prerequisite: Dictionary = chunks[required_id]
+			if prerequisite.codec != 0 or not KNOWN_CHUNK_TYPES.has(prerequisite.type) or not prerequisite.dependencies_available:
+				available = false
+				break
+		chunks[chunk_id].dependencies_available = available
+
+	var needed: Array = []
+	for chunk_id in chunks:
+		if chunks[chunk_id].required or chunks[chunk_id].referenced:
+			needed.append(chunk_id)
+	var visited := {}
+	cursor = 0
+	while cursor < needed.size():
+		var chunk_id: int = needed[cursor]
+		cursor += 1
+		if visited.has(chunk_id):
+			continue
+		visited[chunk_id] = true
+		for required_id in dependencies.get(chunk_id, []):
+			chunks[required_id].referenced = true
+			needed.append(required_id)
+
+	var hinted := {}
+	for index in range(manifest.get("streamHints", []).size()):
+		var hint: Variant = manifest.streamHints[index]
+		if typeof(hint) != TYPE_DICTIONARY or hint.size() != 2 or not hint.has("chunkId") or not hint.has("priority"):
+			return "streamHints[%d] must contain only chunkId and priority." % index
+		if not _is_uint(hint.chunkId) or not chunks.has(int(hint.chunkId)) or hinted.has(int(hint.chunkId)):
+			return "streamHints[%d] has an unknown or duplicate chunkId." % index
+		if not _is_uint(hint.priority) or hint.priority > 255:
+			return "streamHints[%d].priority must be in 0..255." % index
+		hinted[int(hint.chunkId)] = true
 	return ""
 
 
@@ -397,7 +480,7 @@ static func _validate_accessors(accessors: Array, views: Array, chunks: Dictiona
 		if byte_offset + byte_count > view.byteLength:
 			return "accessors[%d] exceeds its declared bufferView range." % index
 		var chunk: Dictionary = chunks[int(view.chunkId)]
-		if chunk.codec != 0:
+		if chunk.codec != 0 or not chunk.dependencies_available:
 			continue
 		if accessor.componentType == "F32":
 			var accessor_start: int = chunk.file_offset + view.byteOffset + byte_offset
@@ -501,7 +584,7 @@ static func _base_result(source_name: String, bytes: PackedByteArray) -> Diction
 		"capabilities": {
 			"implemented": IMPLEMENTED_CAPABILITIES.duplicate(),
 			"declared": [],
-			"notes": ["Validation is partial; the diagnostic preview is not a full ADM renderer. Texture decoding, animation evaluation, and IK solving are unsupported."]
+			"notes": ["Validation is partial; the diagnostic preview supports some PNG/JPEG textures but is not a full ADM renderer. Animation evaluation and IK solving are unsupported."]
 		},
 		"declared_capabilities": [],
 		"unsupported": [],

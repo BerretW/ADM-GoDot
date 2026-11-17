@@ -62,7 +62,7 @@ func _run() -> void:
 		"limitations": [
 			"Subset checks do not establish full ADM validity or conformance.",
 			"Extension data is preserved, not interpreted; required extensions remain unsupported.",
-			"Rendering, texture decoding, animation evaluation and IK are not implemented."
+			"Only a separate diagnostic static geometry preview with partial material and PNG/JPEG texture support exists; animation evaluation and IK are not implemented."
 		],
 	}
 	var output_file := FileAccess.open(REPORT_PATH, FileAccess.WRITE)

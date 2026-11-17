@@ -2,7 +2,11 @@
 	"engineVersion": "4.7.2-stable (official)",
 	"limitations": [
 		"Headless test checks decoded geometry and hierarchy, not rasterized pixels.",
-		"Diagnostic preview supports base color PNG/JPEG and selected sampler modes only; full PBR, skinning, morphs, animation and IK are unsupported.",
+		"Diagnostic preview supports base color and emission PNG/JPEG, including KTX2/DDS fallback images, and selected sampler modes only; full PBR, skinning, morphs, animation and IK are unsupported.",
+		"GPU texture containers are not decoded or fully validated; fallback source header dimensions are checked.",
+		"Emissive material output does not imply bloom, glow or illumination of other geometry.",
+		"Joint frames are diagnostic rest-pose geometry only; extension import/export and full validation are not implemented.",
+		"COLOR_1.R is a partial diagnostic shader, not a fully supported shader or a PBR fallback; normal and metallic maps and other vertex-control effects remain unsupported.",
 		"Uploaded asset provenance is not established."
 	],
 	"reportType": "ADM diagnostic geometry preview smoke test",
@@ -25,14 +29,21 @@
 					0.0
 				],
 				"diagnosticOverride": false,
+				"jointDisplay": {
+					"count": 0,
+					"mode": "authored_rest_pose_only",
+					"status": "unavailable",
+					"visible": false
+				},
 				"limitations": [
 					"Diagnostický náhled: statická geometrie a částečný materiálový fallback; nejde o úplný PBR render.",
-					"Pokročilé shadery, další texturové kanály, vertex barvy, morph, skinning, animace, IK a kolize nejsou vykresleny.",
+					"Pokročilé shadery, normal/metallic/roughness/occlusion textury, vertex barvy, morph, skinning, animace, IK a kolize nejsou vykresleny.",
 					"Pokud normály chybí, jsou dopočítány pro náhled; nasvícení a průhlednost nejsou přesná implementace ADM."
 				],
 				"materials": [
 					{
 						"baseColorTexture": "absent",
+						"emissiveTexture": "absent",
 						"materialIndex": -1,
 						"shaderFallbackActive": true,
 						"shaderId": "adm.pbr.metallic_roughness",
@@ -66,15 +77,22 @@
 					0.0
 				],
 				"diagnosticOverride": false,
+				"jointDisplay": {
+					"count": 0,
+					"mode": "authored_rest_pose_only",
+					"status": "unavailable",
+					"visible": false
+				},
 				"limitations": [
 					"Diagnostický náhled: statická geometrie a částečný materiálový fallback; nejde o úplný PBR render.",
-					"Pokročilé shadery, další texturové kanály, vertex barvy, morph, skinning, animace, IK a kolize nejsou vykresleny.",
+					"Pokročilé shadery, normal/metallic/roughness/occlusion textury, vertex barvy, morph, skinning, animace, IK a kolize nejsou vykresleny.",
 					"Pokud normály chybí, jsou dopočítány pro náhled; nasvícení a průhlednost nejsou přesná implementace ADM.",
 					"Shader adm.pbr.layered@1.0.0 není podporován; používá se neúplný PBR fallback."
 				],
 				"materials": [
 					{
 						"baseColorTexture": "absent",
+						"emissiveTexture": "absent",
 						"materialIndex": 0,
 						"shaderFallbackActive": true,
 						"shaderId": "adm.pbr.layered",
@@ -118,16 +136,19 @@
 					-0.219999998807907
 				],
 				"diagnosticOverride": true,
+				"jointDisplay": {
+					"count": 0,
+					"mode": "authored_rest_pose_only",
+					"status": "unavailable",
+					"visible": false
+				},
 				"limitations": [
 					"Diagnostický náhled: statická geometrie a částečný materiálový fallback; nejde o úplný PBR render.",
-					"Pokročilé shadery, další texturové kanály, vertex barvy, morph, skinning, animace, IK a kolize nejsou vykresleny.",
+					"Pokročilé shadery, normal/metallic/roughness/occlusion textury, vertex barvy, morph, skinning, animace, IK a kolize nejsou vykresleny.",
 					"Pokud normály chybí, jsou dopočítány pro náhled; nasvícení a průhlednost nejsou přesná implementace ADM.",
 					"POZOR: povinná rozšíření nejsou podporována; model nebyl přijat jako kompatibilní.",
 					"Shader adm.vehicle.paint@1.0.0 není podporován; používá se neúplný PBR fallback.",
 					"Materiál 2: normalTexture zatím není vykreslen.",
-					"Materiál 2: emissiveFactor zatím není vykreslen.",
-					"Materiál 1: emissiveTexture zatím není vykreslen.",
-					"Materiál 1: emissiveFactor zatím není vykreslen.",
 					"Shader adm.pbr.layered@1.0.0 není podporován; používá se neúplný PBR fallback.",
 					"Materiál 0: metallicRoughnessTexture zatím není vykreslen.",
 					"Materiál 0: normalTexture zatím není vykreslen.",
@@ -136,6 +157,7 @@
 				"materials": [
 					{
 						"baseColorTexture": "png_jpeg",
+						"emissiveTexture": "absent",
 						"materialIndex": 2,
 						"shaderFallbackActive": true,
 						"shaderId": "adm.vehicle.paint",
@@ -144,6 +166,7 @@
 					},
 					{
 						"baseColorTexture": "png_jpeg",
+						"emissiveTexture": "png_jpeg",
 						"materialIndex": 1,
 						"shaderFallbackActive": true,
 						"shaderId": "adm.pbr.metallic_roughness",
@@ -152,6 +175,7 @@
 					},
 					{
 						"baseColorTexture": "png_jpeg",
+						"emissiveTexture": "absent",
 						"materialIndex": 0,
 						"shaderFallbackActive": true,
 						"shaderId": "adm.pbr.layered",
@@ -187,7 +211,57 @@
 			"passed": true
 		},
 		{
+			"details": "",
+			"name": "emissive_factor_multiplies_texture",
+			"passed": true
+		},
+		{
+			"details": "",
+			"name": "different_emissive_sampler_is_reported",
+			"passed": true
+		},
+		{
+			"name": "detail_shader_binds_authored_mask_and_strength",
+			"passed": true
+		},
+		{
+			"name": "detail_shader_does_not_substitute_other_versions",
+			"passed": true
+		},
+		{
+			"name": "detail_shader_requires_diagnostic_override",
+			"passed": true
+		},
+		{
+			"name": "detail_shader_requires_vertex_control_extension",
+			"passed": true
+		},
+		{
 			"name": "unsupported_sampler_reported_image/png",
+			"passed": true
+		},
+		{
+			"name": "gpu_texture_fallback_image/vnd-ms.dds_image/png",
+			"passed": true
+		},
+		{
+			"name": "gpu_texture_missing_fallback_image/vnd-ms.dds_image/png",
+			"passed": true
+		},
+		{
+			"name": "gpu_texture_mismatched_fallback_image/vnd-ms.dds_image/png",
+			"passed": true
+		},
+		{
+			"name": "gpu_texture_fallback_image/ktx2_image/png",
+			"passed": true
+		},
+		{
+			"name": "gpu_texture_missing_fallback_image/ktx2_image/png",
+			"passed": true
+		},
+		{
+			"name": "gpu_texture_mismatched_fallback_image/ktx2_image/png",
 			"passed": true
 		},
 		{
@@ -202,11 +276,156 @@
 		{
 			"name": "unsupported_sampler_reported_image/jpeg",
 			"passed": true
+		},
+		{
+			"name": "gpu_texture_fallback_image/vnd-ms.dds_image/jpeg",
+			"passed": true
+		},
+		{
+			"name": "gpu_texture_missing_fallback_image/vnd-ms.dds_image/jpeg",
+			"passed": true
+		},
+		{
+			"name": "gpu_texture_mismatched_fallback_image/vnd-ms.dds_image/jpeg",
+			"passed": true
+		},
+		{
+			"name": "gpu_texture_fallback_image/ktx2_image/jpeg",
+			"passed": true
+		},
+		{
+			"name": "gpu_texture_missing_fallback_image/ktx2_image/jpeg",
+			"passed": true
+		},
+		{
+			"name": "gpu_texture_mismatched_fallback_image/ktx2_image/jpeg",
+			"passed": true
+		},
+		{
+			"error": "",
+			"name": "joint_display_hierarchy_endpoints_and_roll",
+			"passed": true
+		},
+		{
+			"name": "required_joint_display_missing_is_rejected",
+			"passed": true
+		},
+		{
+			"name": "undeclared_joint_display_is_rejected",
+			"passed": true
+		},
+		{
+			"name": "joint_display_invalid_non_affine",
+			"passed": true
+		},
+		{
+			"name": "joint_display_invalid_singular",
+			"passed": true
+		},
+		{
+			"name": "joint_display_invalid_non_finite",
+			"passed": true
+		},
+		{
+			"name": "joint_display_invalid_zero_tail",
+			"passed": true
+		},
+		{
+			"name": "joint_display_invalid_extra_member",
+			"passed": true
+		},
+		{
+			"name": "joint_display_invalid_wrong_version",
+			"passed": true
+		},
+		{
+			"name": "joint_display_axes_handle_numeric_scale",
+			"passed": true
+		},
+		{
+			"name": "color1_f32_linear_values",
+			"passed": true
+		},
+		{
+			"name": "color1_absent_defaults_to_zero",
+			"passed": true
+		},
+		{
+			"name": "color1_out_of_range_rejected",
+			"passed": true
+		},
+		{
+			"name": "color1_truncated_file_rejected",
+			"passed": true
+		},
+		{
+			"name": "color1_truncated_view_rejected",
+			"passed": true
+		},
+		{
+			"name": "color1_u8_normalized",
+			"passed": true
+		},
+		{
+			"name": "color1_u8_unnormalized_rejected",
+			"passed": true
+		},
+		{
+			"assetSha256": "f96b4571ff5f373aa0cb1085497f061feec1132ef45a597c0109675eb7feae02",
+			"name": "local_human_emissive_fallback",
+			"passed": true,
+			"preview": {
+				"boundsMax": [
+					0.921872079372406,
+					1.79105043411255,
+					0.222043991088867
+				],
+				"boundsMin": [
+					-0.874815165996552,
+					0.00125194515567273,
+					-0.197723090648651
+				],
+				"diagnosticOverride": true,
+				"jointDisplay": {
+					"count": 67,
+					"mode": "authored_rest_pose_only",
+					"status": "available",
+					"visible": false
+				},
+				"limitations": [
+					"Diagnostický náhled: statická geometrie a částečný materiálový fallback; nejde o úplný PBR render.",
+					"Pokročilé shadery, normal/metallic/roughness/occlusion textury, vertex barvy, morph, skinning, animace, IK a kolize nejsou vykresleny.",
+					"Pokud normály chybí, jsou dopočítány pro náhled; nasvícení a průhlednost nejsou přesná implementace ADM.",
+					"POZOR: povinná rozšíření nejsou podporována; model nebyl přijat jako kompatibilní.",
+					"Materiál 0: emisní textura používá PNG/JPEG fallback místo KTX2/DDS.",
+					"Materiál 0: diagnostická částečná vrstva COLOR_1.R nenahrazuje úplný shader ani PBR fallback; normal mapy, metalické mapy a ostatní kanály nejsou vykresleny.",
+					"Rámce kloubů zobrazují pouze autorská display data v klidové póze, nikoli skinning nebo animaci.",
+					"ADM_joint_display_v1 je implementováno pouze částečně: úplná validace a zachování při importu/exportu chybí; výpočty používají přesnost Godotu."
+				],
+				"materials": [
+					{
+						"baseColorTexture": "absent",
+						"color1RRoughnessTexture": "fallback_png_jpeg",
+						"color1RTexture": "fallback_png_jpeg",
+						"emissiveTexture": "fallback_png_jpeg",
+						"materialIndex": 0,
+						"shaderFallbackActive": false,
+						"shaderId": "adm.pbr.metallic_roughness",
+						"shaderRendering": "partial_diagnostic",
+						"shaderSupported": false,
+						"shaderVersion": "2.1.0"
+					}
+				],
+				"meshPrimitives": 1,
+				"status": "diagnostic_only",
+				"triangles": 14808,
+				"vertices": 8349
+			}
 		}
 	],
 	"specification": {
-		"commit": "0c6e9539c4e3b8cc7d8249ebed7bcfcfe12e9167",
-		"url": "https://github.com/BerretW/ADM/blob/main/adm-standard/ADM-1.0-SPEC.md",
+		"commit": "0fe5ac81683584683a6d83b40bf779d6d219cde5",
+		"url": "https://github.com/BerretW/ADM/blob/0fe5ac81683584683a6d83b40bf779d6d219cde5/adm-standard/ADM-1.0-SPEC.md",
 		"version": "ADM 1.0"
 	}
 }

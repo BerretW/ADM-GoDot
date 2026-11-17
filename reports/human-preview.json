@@ -1,0 +1,115 @@
+{
+	"assetSha256": "f96b4571ff5f373aa0cb1085497f061feec1132ef45a597c0109675eb7feae02",
+	"capabilities": {
+		"declared": [
+			"required-extension:ADM_joint_display_v1",
+			"required-extension:ADM_vertex_control_v1",
+			"extension:ADM_joint_display_v1",
+			"extension:ADM_vertex_control_v1",
+			"ADM-CORE-1",
+			"triangle-mesh-data",
+			"ADM-SHADER-CORE-1",
+			"skinning"
+		],
+		"implemented": [
+			"ADM-CONTAINER-1 (partial: RAW chunks, header/directory/hash and dependency checks; no streaming)",
+			"ADM-CORE-1 (metadata and structural validation subset)",
+			"ADM-ANIM-1 (container and library metadata validation subset)"
+		],
+		"notes": [
+			"Validation is partial; the diagnostic preview supports some PNG/JPEG textures but is not a full ADM renderer. Animation evaluation and IK solving are unsupported."
+		]
+	},
+	"deviations": [
+		"Required extension 'ADM_joint_display_v1' is not implemented by this validation milestone.",
+		"Required extension 'ADM_vertex_control_v1' is not implemented by this validation milestone."
+	],
+	"engineVersion": "4.7.2-stable (official)",
+	"limitations": [
+		"Diagnostický náhled: statická geometrie a částečný materiálový fallback; nejde o úplný PBR render.",
+		"Pokročilé shadery, normal/metallic/roughness/occlusion textury, vertex barvy, morph, skinning, animace, IK a kolize nejsou vykresleny.",
+		"Pokud normály chybí, jsou dopočítány pro náhled; nasvícení a průhlednost nejsou přesná implementace ADM.",
+		"POZOR: povinná rozšíření nejsou podporována; model nebyl přijat jako kompatibilní.",
+		"Materiál 0: emisní textura používá PNG/JPEG fallback místo KTX2/DDS.",
+		"Materiál 0: diagnostická částečná vrstva COLOR_1.R nenahrazuje úplný shader ani PBR fallback; normal mapy, metalické mapy a ostatní kanály nejsou vykresleny.",
+		"Rámce kloubů zobrazují pouze autorská display data v klidové póze, nikoli skinning nebo animaci.",
+		"ADM_joint_display_v1 je implementováno pouze částečně: úplná validace a zachování při importu/exportu chybí; výpočty používají přesnost Godotu.",
+		"Asset provenance and cross-engine comparison are not established.",
+		"Emission is material output, not bloom or illumination of surrounding geometry."
+	],
+	"preview": {
+		"boundsMax": [
+			0.921872079372406,
+			1.79105043411255,
+			0.222043991088867
+		],
+		"boundsMin": [
+			-0.874815165996552,
+			0.00125194515567273,
+			-0.197723090648651
+		],
+		"diagnosticOverride": true,
+		"jointDisplay": {
+			"count": 67,
+			"mode": "authored_rest_pose_only",
+			"status": "available",
+			"visible": true
+		},
+		"limitations": [
+			"Diagnostický náhled: statická geometrie a částečný materiálový fallback; nejde o úplný PBR render.",
+			"Pokročilé shadery, normal/metallic/roughness/occlusion textury, vertex barvy, morph, skinning, animace, IK a kolize nejsou vykresleny.",
+			"Pokud normály chybí, jsou dopočítány pro náhled; nasvícení a průhlednost nejsou přesná implementace ADM.",
+			"POZOR: povinná rozšíření nejsou podporována; model nebyl přijat jako kompatibilní.",
+			"Materiál 0: emisní textura používá PNG/JPEG fallback místo KTX2/DDS.",
+			"Materiál 0: diagnostická částečná vrstva COLOR_1.R nenahrazuje úplný shader ani PBR fallback; normal mapy, metalické mapy a ostatní kanály nejsou vykresleny.",
+			"Rámce kloubů zobrazují pouze autorská display data v klidové póze, nikoli skinning nebo animaci.",
+			"ADM_joint_display_v1 je implementováno pouze částečně: úplná validace a zachování při importu/exportu chybí; výpočty používají přesnost Godotu."
+		],
+		"materials": [
+			{
+				"baseColorTexture": "absent",
+				"color1RRoughnessTexture": "fallback_png_jpeg",
+				"color1RTexture": "fallback_png_jpeg",
+				"emissiveTexture": "fallback_png_jpeg",
+				"materialIndex": 0,
+				"shaderFallbackActive": false,
+				"shaderId": "adm.pbr.metallic_roughness",
+				"shaderRendering": "partial_diagnostic",
+				"shaderSupported": false,
+				"shaderVersion": "2.1.0"
+			}
+		],
+		"meshPrimitives": 1,
+		"status": "diagnostic_only",
+		"triangles": 14808,
+		"vertices": 8349
+	},
+	"reportType": "Human diagnostic preview UI test",
+	"results": [
+		{
+			"name": "rendered_foreground",
+			"passed": true,
+			"sampleCount": 1010
+		},
+		{
+			"changedPixels": 16581,
+			"name": "authored_color1_r_texture_visible",
+			"passed": true
+		},
+		{
+			"changedPixels": 944,
+			"jointCount": 67,
+			"name": "joint_display_toggle_and_pixels",
+			"passed": true
+		}
+	],
+	"runtimeStatus": "unsupported",
+	"screenshot": "human-preview.png",
+	"specification": {
+		"commit": "0fe5ac81683584683a6d83b40bf779d6d219cde5",
+		"url": "https://github.com/BerretW/ADM/blob/0fe5ac81683584683a6d83b40bf779d6d219cde5/adm-standard/ADM-1.0-SPEC.md",
+		"version": "ADM 1.0"
+	},
+	"texturedScreenshot": "human-textured-preview.png",
+	"validationStatus": "unsupported"
+}

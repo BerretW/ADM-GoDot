@@ -6,6 +6,8 @@ const MAX_INDICES := 3000000
 const MAX_SCENE_NODES := 100000
 const MAX_IMAGE_DIMENSION := 8192
 const MAX_IMAGE_PIXELS := 16777216
+const JOINT_DISPLAY_EXTENSION := "ADM_joint_display_v1"
+const DETAIL_SHADER = preload("res://scripts/adm_detail_preview.gdshader")
 
 
 static func load_path(path: String, diagnostic: bool = false) -> Dictionary:
@@ -33,6 +35,13 @@ static func load_path(path: String, diagnostic: bool = false) -> Dictionary:
 
 static func build(bytes: PackedByteArray, report: Dictionary, diagnostic: bool) -> Dictionary:
 	var manifest: Dictionary = report.manifest
+	var displays := _joint_displays(manifest)
+	if displays.has("error"):
+		if displays.get("invalid", false):
+			report.status = "invalid"
+			report.diagnostics.append(displays.error)
+			report.deviations.append(displays.error)
+		return {"error": displays.error, "report": report}
 	var chunks := {}
 	var directory_offset := Validator._u64(bytes, 40)
 	var chunk_count := Validator._u32(bytes, 48)
@@ -47,7 +56,7 @@ static func build(bytes: PackedByteArray, report: Dictionary, diagnostic: bool) 
 	root.name = "ADMModel"
 	var warnings: Array[String] = [
 		"Diagnostický náhled: statická geometrie a částečný materiálový fallback; nejde o úplný PBR render.",
-		"Pokročilé shadery, další texturové kanály, vertex barvy, morph, skinning, animace, IK a kolize nejsou vykresleny.",
+		"Pokročilé shadery, normal/metallic/roughness/occlusion textury, vertex barvy, morph, skinning, animace, IK a kolize nejsou vykresleny.",
 		"Pokud normály chybí, jsou dopočítány pro náhled; nasvícení a průhlednost nejsou přesná implementace ADM."
 	]
 	var material_info: Array = []
@@ -64,6 +73,9 @@ static func build(bytes: PackedByteArray, report: Dictionary, diagnostic: bool) 
 	var mesh_count := 0
 	var vertex_total := 0
 	var triangle_total := 0
+	var joint_vertices := PackedVector3Array()
+	var joint_colors := PackedColorArray()
+	var joint_count := 0
 	while not pending.is_empty():
 		var item: Dictionary = pending.pop_back()
 		if not _index(item.index, manifest.nodes.size()) or seen.has(int(item.index)):
@@ -84,10 +96,33 @@ static func build(bytes: PackedByteArray, report: Dictionary, diagnostic: bool) 
 		node.transform = transform_result.value
 		item.parent.add_child(node)
 		var world: Transform3D = item.world * node.transform
+		if displays.nodes.has(node_index):
+			var display: Dictionary = displays.nodes[node_index]
+			var frame: Transform3D = world * display.frame
+			var head: Vector3 = frame.origin
+			var tail: Vector3 = frame * display.tail
+			if not head.is_finite() or not tail.is_finite() or not frame.basis.is_finite():
+				root.free()
+				return {"error": "Uzel %d: rámec kloubu překračuje číselný rozsah náhledu." % node_index, "report": report}
+			var axis_length := head.distance_to(tail) * 0.15
+			if not is_finite(axis_length) or axis_length == 0:
+				root.free()
+				return {"error": "Uzel %d: délku kloubu nelze zobrazit v číselné přesnosti náhledu." % node_index, "report": report}
+			var axis_x := head + _display_axis(frame.basis.x) * axis_length
+			var axis_y := head + _display_axis(frame.basis.y) * axis_length
+			var axis_z := head + _display_axis(frame.basis.z) * axis_length
+			if not axis_x.is_finite() or not axis_y.is_finite() or not axis_z.is_finite():
+				root.free()
+				return {"error": "Uzel %d: osy rámce překračují číselný rozsah náhledu." % node_index, "report": report}
+			_append_joint_line(joint_vertices, joint_colors, head, tail, Color(0.1, 0.9, 1.0))
+			_append_joint_line(joint_vertices, joint_colors, head, axis_x, Color.RED)
+			_append_joint_line(joint_vertices, joint_colors, head, axis_y, Color.GREEN)
+			_append_joint_line(joint_vertices, joint_colors, head, axis_z, Color.BLUE)
+			joint_count += 1
 		if data.has("mesh"):
 			var mesh: Dictionary = manifest.meshes[int(data.mesh)]
 			for primitive in mesh.primitives:
-				var built := _primitive(primitive, manifest, chunks, bytes, MAX_VERTICES - vertex_total, MAX_INDICES - triangle_total * 3, texture_cache)
+				var built := _primitive(primitive, manifest, chunks, bytes, MAX_VERTICES - vertex_total, MAX_INDICES - triangle_total * 3, texture_cache, diagnostic and report.status == "unsupported")
 				if built.has("error"):
 					root.free()
 					return {"error": "Uzel %d: %s" % [node_index, built.error], "report": report}
@@ -114,6 +149,25 @@ static func build(bytes: PackedByteArray, report: Dictionary, diagnostic: bool) 
 	if not has_bounds:
 		root.free()
 		return {"error": "Výchozí scéna neobsahuje zobrazitelnou geometrii.", "report": report}
+	if joint_count > 0:
+		var arrays := []
+		arrays.resize(Mesh.ARRAY_MAX)
+		arrays[Mesh.ARRAY_VERTEX] = joint_vertices
+		arrays[Mesh.ARRAY_COLOR] = joint_colors
+		var mesh := ArrayMesh.new()
+		mesh.add_surface_from_arrays(Mesh.PRIMITIVE_LINES, arrays)
+		var material := StandardMaterial3D.new()
+		material.shading_mode = BaseMaterial3D.SHADING_MODE_UNSHADED
+		material.vertex_color_use_as_albedo = true
+		material.no_depth_test = true
+		mesh.surface_set_material(0, material)
+		var joint_lines := MeshInstance3D.new()
+		joint_lines.name = "ADMJointDisplay"
+		joint_lines.mesh = mesh
+		joint_lines.visible = false
+		root.add_child(joint_lines)
+		warnings.append("Rámce kloubů zobrazují pouze autorská display data v klidové póze, nikoli skinning nebo animaci.")
+		warnings.append("ADM_joint_display_v1 je implementováno pouze částečně: úplná validace a zachování při importu/exportu chybí; výpočty používají přesnost Godotu.")
 	report.runtimeStatus = "unsupported"
 	report.runtimeLimitations = warnings
 	report.preview = {
@@ -122,12 +176,80 @@ static func build(bytes: PackedByteArray, report: Dictionary, diagnostic: bool) 
 		"boundsMin": [bounds.position.x, bounds.position.y, bounds.position.z],
 		"boundsMax": [bounds.end.x, bounds.end.y, bounds.end.z],
 		"diagnosticOverride": diagnostic and report.status == "unsupported",
+		"jointDisplay": {"status": "available" if joint_count > 0 else "unavailable", "count": joint_count, "visible": false, "mode": "authored_rest_pose_only"},
 		"limitations": warnings, "materials": material_info
 	}
 	return {"root": root, "bounds": bounds, "report": report}
 
 
-static func _primitive(primitive: Variant, manifest: Dictionary, chunks: Dictionary, bytes: PackedByteArray, vertex_limit: int, index_limit: int, texture_cache: Dictionary) -> Dictionary:
+static func _append_joint_line(vertices: PackedVector3Array, colors: PackedColorArray, start: Vector3, end: Vector3, color: Color) -> void:
+	vertices.append(start)
+	vertices.append(end)
+	colors.append(color)
+	colors.append(color)
+
+
+static func _display_axis(axis: Vector3) -> Vector3:
+	var largest := maxf(absf(axis.x), maxf(absf(axis.y), absf(axis.z)))
+	return (axis / largest).normalized() if largest > 0 else Vector3.ZERO
+
+
+static func _joint_displays(manifest: Dictionary) -> Dictionary:
+	var result := {}
+	var used: bool = manifest.get("extensionsUsed", []).has(JOINT_DISPLAY_EXTENSION)
+	var required: bool = manifest.get("extensionsRequired", []).has(JOINT_DISPLAY_EXTENSION)
+	for index in range(manifest.nodes.size()):
+		var node: Variant = manifest.nodes[index]
+		if typeof(node) != TYPE_DICTIONARY:
+			return {"error": "Uzel %d není objekt." % index, "invalid": true}
+		var extensions: Variant = node.get("extensions", {})
+		if typeof(extensions) != TYPE_DICTIONARY:
+			return {"error": "Uzel %d má neplatná rozšíření." % index, "invalid": true}
+		if not extensions.has(JOINT_DISPLAY_EXTENSION):
+			continue
+		if not used:
+			return {"error": "Uzel %d používá nedeklarované ADM_joint_display_v1." % index, "invalid": true}
+		var parsed := _joint_display_frame(extensions[JOINT_DISPLAY_EXTENSION])
+		if parsed.has("error"):
+			return {"error": "Uzel %d: %s" % [index, parsed.error], "invalid": parsed.get("invalid", false)}
+		result[index] = parsed
+	if required:
+		for skin in manifest.get("skins", []):
+			if typeof(skin) != TYPE_DICTIONARY or typeof(skin.get("joints")) != TYPE_ARRAY:
+				return {"error": "Skin nemá platné pole joints pro povinné ADM_joint_display_v1.", "invalid": true}
+			for joint in skin.joints:
+				if not _index(joint, manifest.nodes.size()) or not result.has(int(joint)):
+					return {"error": "Skin odkazuje na kloub bez povinného ADM_joint_display_v1.", "invalid": true}
+	return {"nodes": result}
+
+
+static func _joint_display_frame(value: Variant) -> Dictionary:
+	if typeof(value) != TYPE_DICTIONARY or value.size() != 3 or value.get("version") != "1.0.0" or not value.has("displayFrame") or not value.has("tail"):
+		return {"error": "Neplatné členy nebo verze ADM_joint_display_v1.", "invalid": true}
+	var m: Variant = value.displayFrame
+	var tail: Variant = value.tail
+	if not _numbers(m, 16) or not _numbers(tail, 3) or (tail[0] == 0 and tail[1] == 0 and tail[2] == 0):
+		return {"error": "Neplatný displayFrame nebo nulový tail.", "invalid": true}
+	if m[3] != 0 or m[7] != 0 or m[11] != 0 or m[15] != 1:
+		return {"error": "displayFrame není afinní.", "invalid": true}
+	var determinant: float = float(m[0]) * (float(m[5]) * float(m[10]) - float(m[9]) * float(m[6])) - float(m[4]) * (float(m[1]) * float(m[10]) - float(m[9]) * float(m[2])) + float(m[8]) * (float(m[1]) * float(m[6]) - float(m[5]) * float(m[2]))
+	if not is_finite(determinant):
+		return {"error": "Determinant displayFrame překračuje číselný rozsah náhledu."}
+	if determinant == 0:
+		var zero_column: bool = (m[0] == 0 and m[1] == 0 and m[2] == 0) or (m[4] == 0 and m[5] == 0 and m[6] == 0) or (m[8] == 0 and m[9] == 0 and m[10] == 0)
+		return {"error": "displayFrame je singulární nebo mimo číselnou přesnost náhledu.", "invalid": zero_column}
+	var transformed := _transform({"matrix": m})
+	if transformed.has("error"):
+		return transformed
+	var frame: Transform3D = transformed.value
+	var endpoint := Vector3(tail[0], tail[1], tail[2])
+	var preview_determinant := frame.basis.determinant()
+	if not frame.basis.is_finite() or not frame.origin.is_finite() or not endpoint.is_finite() or not is_finite(preview_determinant) or preview_determinant == 0 or endpoint == Vector3.ZERO:
+		return {"error": "displayFrame nebo tail překračuje číselný rozsah náhledu."}
+	return {"frame": frame, "tail": endpoint}
+
+
+static func _primitive(primitive: Variant, manifest: Dictionary, chunks: Dictionary, bytes: PackedByteArray, vertex_limit: int, index_limit: int, texture_cache: Dictionary, partial_shader: bool = false) -> Dictionary:
 	if typeof(primitive) != TYPE_DICTIONARY or typeof(primitive.get("attributes")) != TYPE_DICTIONARY:
 		return {"error": "Neplatná primitiva nebo atributy."}
 	if not primitive.attributes.has("POSITION") or not primitive.has("indices"):
@@ -190,8 +312,9 @@ static func _primitive(primitive: Variant, manifest: Dictionary, chunks: Diction
 			normals[index] = normals[index].normalized() if normals[index].length_squared() > 0.000000000001 else Vector3.UP
 	arrays[Mesh.ARRAY_NORMAL] = normals
 	var material := StandardMaterial3D.new()
+	var output_material: Material = material
 	var warnings: Array[String] = []
-	var info := {"materialIndex": -1, "shaderId": "adm.pbr.metallic_roughness", "shaderVersion": "1.0.0", "shaderSupported": false, "shaderFallbackActive": true, "baseColorTexture": "absent"}
+	var info := {"materialIndex": -1, "shaderId": "adm.pbr.metallic_roughness", "shaderVersion": "1.0.0", "shaderSupported": false, "shaderFallbackActive": true, "baseColorTexture": "absent", "emissiveTexture": "absent"}
 	material.cull_mode = BaseMaterial3D.CULL_DISABLED
 	if primitive.has("material"):
 		var materials: Array = manifest.get("materials", [])
@@ -230,9 +353,11 @@ static func _primitive(primitive: Variant, manifest: Dictionary, chunks: Diction
 			material.alpha_scissor_threshold = float(cutoff)
 		elif alpha_mode != "OPAQUE":
 			return {"error": "Neplatný alphaMode."}
-		for field in ["metallicRoughnessTexture", "normalTexture", "occlusionTexture", "emissiveTexture", "emissiveFactor"]:
-			if data.has(field) and (field != "emissiveFactor" or data[field] != [0.0, 0.0, 0.0]):
+		for field in ["metallicRoughnessTexture", "normalTexture", "occlusionTexture"]:
+			if data.has(field):
 				warnings.append("Materiál %d: %s zatím není vykreslen." % [int(primitive.material), field])
+		var base_binding := {}
+		var emission_binding := {}
 		if data.has("baseColorTexture"):
 			var binding := _base_texture(data.baseColorTexture, primitive.attributes, vertices.size(), manifest, chunks, bytes, texture_cache)
 			if binding.has("error"):
@@ -241,18 +366,161 @@ static func _primitive(primitive: Variant, manifest: Dictionary, chunks: Diction
 				info.baseColorTexture = "unsupported"
 				warnings.append("Materiál %d: %s" % [int(primitive.material), binding.warning])
 			else:
+				base_binding = binding
 				arrays[Mesh.ARRAY_TEX_UV] = binding.uv
 				material.albedo_texture = binding.texture
 				material.texture_repeat = binding.repeat
 				material.texture_filter = binding.filter
-				info.baseColorTexture = "png_jpeg"
+				info.baseColorTexture = binding.source
+				if binding.source == "fallback_png_jpeg":
+					warnings.append("Materiál %d: základní textura používá PNG/JPEG fallback místo KTX2/DDS." % int(primitive.material))
+		var emission: Variant = data.get("emissiveFactor", [0.0, 0.0, 0.0])
+		if not _numbers(emission, 3) or emission[0] < 0 or emission[1] < 0 or emission[2] < 0:
+			return {"error": "Neplatná emissiveFactor."}
+		var emission_scale: float = maxf(float(emission[0]), maxf(float(emission[1]), float(emission[2])))
+		if emission_scale > 0.0:
+			material.emission_enabled = true
+			material.emission = Color(emission[0] / emission_scale, emission[1] / emission_scale, emission[2] / emission_scale).linear_to_srgb()
+			material.emission_energy_multiplier = emission_scale
+			material.emission_operator = BaseMaterial3D.EMISSION_OP_MULTIPLY
+		if data.has("emissiveTexture"):
+			var binding := _base_texture(data.emissiveTexture, primitive.attributes, vertices.size(), manifest, chunks, bytes, texture_cache)
+			if binding.has("error"):
+				return binding
+			if binding.has("warning"):
+				info.emissiveTexture = "unsupported"
+				material.emission_enabled = false
+				warnings.append("Materiál %d: emisní textura: %s" % [int(primitive.material), binding.warning])
+			elif not base_binding.is_empty() and (base_binding.uv != binding.uv or base_binding.repeat != binding.repeat or base_binding.filter != binding.filter):
+				info.emissiveTexture = "unsupported"
+				material.emission_enabled = false
+				warnings.append("Materiál %d: rozdílné UV nebo sampler emisní textury zatím nejsou podporovány." % int(primitive.material))
+			else:
+				emission_binding = binding
+				arrays[Mesh.ARRAY_TEX_UV] = binding.uv
+				material.texture_repeat = binding.repeat
+				material.texture_filter = binding.filter
+				material.emission_texture = binding.texture
+				info.emissiveTexture = binding.source
+				if binding.source == "fallback_png_jpeg":
+					warnings.append("Materiál %d: emisní textura používá PNG/JPEG fallback místo KTX2/DDS." % int(primitive.material))
+		if partial_shader:
+			var detail := _detail_material(data, shader, primitive.attributes, vertices.size(), manifest, chunks, bytes, texture_cache, base_binding, emission_binding)
+			if detail.has("error"):
+				return detail
+			if detail.has("warning"):
+				warnings.append("Materiál %d: %s" % [int(primitive.material), detail.warning])
+			if detail.has("material"):
+				output_material = detail.material
+				arrays[Mesh.ARRAY_COLOR] = detail.colors
+				arrays[Mesh.ARRAY_TEX_UV] = detail.uv
+				info.shaderFallbackActive = false
+				info.shaderRendering = "partial_diagnostic"
+				info.color1RTexture = detail.source
+				info.color1RRoughnessTexture = detail.roughness_source
+				warnings.erase("Shader %s@%s není podporován; používá se neúplný PBR fallback." % [shader.id, shader.version])
+				warnings.append("Materiál %d: diagnostická částečná vrstva COLOR_1.R nenahrazuje úplný shader ani PBR fallback; normal mapy, metalické mapy a ostatní kanály nejsou vykresleny." % int(primitive.material))
 	else:
 		material.roughness = 1.0
 		material.metallic = 1.0
 	var array_mesh := ArrayMesh.new()
 	array_mesh.add_surface_from_arrays(Mesh.PRIMITIVE_TRIANGLES, arrays)
-	array_mesh.surface_set_material(0, material)
+	array_mesh.surface_set_material(0, output_material)
 	return {"mesh": array_mesh, "vertices": vertices, "triangles": indices.size() / 3, "warnings": warnings, "material_info": info}
+
+
+static func _detail_material(data: Dictionary, shader: Dictionary, attributes: Dictionary, vertex_count: int, manifest: Dictionary, chunks: Dictionary, bytes: PackedByteArray, cache: Dictionary, base: Dictionary, emission: Dictionary) -> Dictionary:
+	if shader.id != "adm.pbr.metallic_roughness" or shader.version != "2.1.0":
+		return {}
+	var parameters: Variant = data.get("shaderParameters", {})
+	if typeof(parameters) != TYPE_DICTIONARY:
+		return {"error": "shaderParameters musí být objekt."}
+	if not parameters.has("color1_r_texture") or parameters.color1_r_texture == null:
+		return {}
+	if not manifest.get("extensionsUsed", []).has("ADM_vertex_control_v1") or not manifest.get("extensionsRequired", []).has("ADM_vertex_control_v1"):
+		return {"error": "COLOR_1 vyžaduje povinné rozšíření ADM_vertex_control_v1."}
+	if data.get("alphaMode", "OPAQUE") != "OPAQUE":
+		return {"warning": "Diagnostická textura COLOR_1.R zatím podporuje pouze neprůhledné materiály."}
+	if data.has("baseColorTexture") and base.is_empty() or data.has("emissiveTexture") and emission.is_empty():
+		return {"warning": "Diagnostická textura COLOR_1.R vyžaduje dostupné základní a emisní textury."}
+	var detail := _base_texture(parameters.color1_r_texture, attributes, vertex_count, manifest, chunks, bytes, cache)
+	if detail.has("error"):
+		return detail
+	if detail.has("warning"):
+		return detail
+	if not detail.repeat or detail.filter != BaseMaterial3D.TEXTURE_FILTER_LINEAR:
+		return {"warning": "Diagnostická textura COLOR_1.R vyžaduje sampler LINEAR/REPEAT."}
+	for binding in [base, emission]:
+		if not binding.is_empty() and (binding.uv != detail.uv or not binding.repeat or binding.filter != detail.filter):
+			return {"warning": "Diagnostická textura COLOR_1.R vyžaduje stejné UV a LINEAR/REPEAT u základní a emisní textury."}
+	var mask := _detail_mask(attributes, vertex_count, manifest, chunks, bytes)
+	if mask.has("error"):
+		return mask
+	var color: Variant = parameters.get("color1_r_color", [0.72, 0.72, 0.72])
+	if not _numbers(color, 3):
+		return {"error": "Neplatná barva COLOR_1.R."}
+	for component in color:
+		if component < 0 or component > 1:
+			return {"error": "Barva COLOR_1.R je mimo rozsah."}
+	for field in ["color1_r_strength", "color1_r_metallic", "color1_r_roughness"]:
+		var value: Variant = parameters.get(field, {"color1_r_strength": 1.0, "color1_r_metallic": 0.0, "color1_r_roughness": 0.6}[field])
+		if (typeof(value) != TYPE_INT and typeof(value) != TYPE_FLOAT) or not is_finite(float(value)) or value < 0 or value > 1:
+			return {"error": "Neplatný parametr %s." % field}
+	var roughness := {}
+	if parameters.has("color1_r_roughness_texture") and parameters.color1_r_roughness_texture != null:
+		roughness = _base_texture(parameters.color1_r_roughness_texture, attributes, vertex_count, manifest, chunks, bytes, cache)
+		if roughness.has("error") or roughness.has("warning"):
+			return roughness
+		if roughness.uv != detail.uv or not roughness.repeat or roughness.filter != detail.filter:
+			return {"warning": "Diagnostická textura drsnosti COLOR_1.R vyžaduje stejný UV a sampler jako detail."}
+	var channel: Variant = parameters.get("color1_r_roughness_channel", 0.0)
+	var invert: Variant = parameters.get("color1_r_roughness_invert", false)
+	if (typeof(channel) != TYPE_INT and typeof(channel) != TYPE_FLOAT) or not is_finite(float(channel)) or channel < 0 or channel > 3 or typeof(invert) != TYPE_BOOL:
+		return {"error": "Neplatný kanál nebo inverze textury drsnosti COLOR_1.R."}
+	var result := ShaderMaterial.new()
+	result.shader = DETAIL_SHADER
+	result.set_shader_parameter("detail_texture", detail.texture)
+	result.set_shader_parameter("detail_factor", Vector3(color[0], color[1], color[2]))
+	result.set_shader_parameter("detail_strength", float(parameters.get("color1_r_strength", 1.0)))
+	result.set_shader_parameter("detail_metallic", float(parameters.get("color1_r_metallic", 0.0)))
+	result.set_shader_parameter("detail_roughness", float(parameters.get("color1_r_roughness", 0.6)))
+	result.set_shader_parameter("base_metallic", float(data.get("metallicFactor", 1.0)))
+	result.set_shader_parameter("base_roughness", float(data.get("roughnessFactor", 1.0)))
+	var base_color: Array = data.get("baseColorFactor", [1.0, 1.0, 1.0, 1.0])
+	result.set_shader_parameter("base_factor", Vector4(base_color[0], base_color[1], base_color[2], base_color[3]))
+	var emission_factor: Array = data.get("emissiveFactor", [0.0, 0.0, 0.0])
+	result.set_shader_parameter("emissive_factor", Vector3(emission_factor[0], emission_factor[1], emission_factor[2]))
+	for item in [{"binding": base, "name": "base"}, {"binding": emission, "name": "emissive"}, {"binding": roughness, "name": "roughness"}]:
+		if not item.binding.is_empty():
+			result.set_shader_parameter("has_%s_texture" % item.name, true)
+			result.set_shader_parameter("%s_texture" % item.name, item.binding.texture)
+	result.set_shader_parameter("roughness_channel", int(floor(float(channel) + 0.5)))
+	result.set_shader_parameter("roughness_invert", invert)
+	return {"material": result, "colors": mask.colors, "uv": detail.uv, "source": detail.source, "roughness_source": roughness.get("source", "absent")}
+
+
+static func _detail_mask(attributes: Dictionary, vertex_count: int, manifest: Dictionary, chunks: Dictionary, bytes: PackedByteArray) -> Dictionary:
+	var colors := PackedColorArray()
+	if not attributes.has("COLOR_1"):
+		colors.resize(vertex_count)
+		colors.fill(Color(0, 0, 0, 0))
+		return {"colors": colors}
+	var input := _accessor(attributes.COLOR_1, "COLOR", "VEC4", manifest, chunks, bytes, vertex_count)
+	if input.has("error"):
+		return input
+	if int(input.accessor.count) != vertex_count:
+		return {"error": "Počet hodnot COLOR_1 neodpovídá počtu vrcholů."}
+	var is_u8: bool = input.accessor.componentType == "U8"
+	for index in range(vertex_count):
+		var at: int = input.offset + index * (4 if is_u8 else 16)
+		var values := []
+		for component in range(4):
+			var value: float = float(bytes[at + component]) / 255.0 if is_u8 else bytes.decode_float(at + component * 4)
+			if not is_finite(value) or value < 0 or value > 1:
+				return {"error": "COLOR_1 obsahuje neplatnou hodnotu."}
+			values.append(value)
+		colors.append(Color(values[0], values[1], values[2], values[3]))
+	return {"colors": colors}
 
 
 static func _base_texture(binding: Variant, attributes: Dictionary, vertex_count: int, manifest: Dictionary, chunks: Dictionary, bytes: PackedByteArray, cache: Dictionary) -> Dictionary:
@@ -292,10 +560,52 @@ static func _base_texture(binding: Variant, attributes: Dictionary, vertex_count
 	var image_data: Variant = images[image_index]
 	if typeof(image_data) != TYPE_DICTIONARY or not image_data.has("mimeType"):
 		return {"error": "Obrázek nemá platný mimeType."}
+	var source := "png_jpeg"
+	var source_dimensions := Vector2i.ZERO
 	if image_data.mimeType == "image/ktx2" or image_data.mimeType == "image/vnd-ms.dds":
-		return {"warning": "KTX2/DDS a jejich fallback zatím nejsou v náhledu podporovány."}
+		if not texture.has("fallbackSource") or not _index(texture.fallbackSource, images.size()):
+			return {"error": "KTX2/DDS textura vyžaduje platný PNG/JPEG fallbackSource."}
+		var gpu_data := _image_bytes(image_data, manifest, chunks, bytes, true)
+		if gpu_data.has("error") or gpu_data.has("warning"):
+			return gpu_data
+		source_dimensions = _image_dimensions(gpu_data.bytes, image_data.mimeType)
+		if source_dimensions.x <= 0 or source_dimensions.y <= 0:
+			return {"error": "KTX2/DDS obrázek nemá platnou hlavičku."}
+		image_index = int(texture.fallbackSource)
+		image_data = images[image_index]
+		if typeof(image_data) != TYPE_DICTIONARY or not ["image/png", "image/jpeg"].has(image_data.get("mimeType")):
+			return {"error": "KTX2/DDS fallback musí být PNG nebo JPEG."}
+		source = "fallback_png_jpeg"
+	elif texture.has("fallbackSource"):
+		return {"error": "PNG/JPEG textura nesmí mít fallbackSource."}
 	if image_data.mimeType != "image/png" and image_data.mimeType != "image/jpeg":
 		return {"error": "Nepovolený mimeType obrázku."}
+	var image_bytes := _image_bytes(image_data, manifest, chunks, bytes)
+	if image_bytes.has("error") or image_bytes.has("warning"):
+		return image_bytes
+	var encoded: PackedByteArray = image_bytes.bytes
+	var dimensions := _image_dimensions(encoded, image_data.mimeType)
+	if dimensions.x <= 0 or dimensions.y <= 0:
+		return {"error": "Obrázek nemá platnou hlavičku odpovídající mimeType."}
+	if source_dimensions != Vector2i.ZERO and source_dimensions != dimensions:
+		return {"error": "KTX2/DDS a PNG/JPEG fallback mají rozdílné rozměry."}
+	if dimensions.x > MAX_IMAGE_DIMENSION or dimensions.y > MAX_IMAGE_DIMENSION or dimensions.x * dimensions.y > MAX_IMAGE_PIXELS:
+		return {"warning": "Obrázek překračuje limit velikosti náhledu."}
+	var uv := PackedVector2Array()
+	for index in range(vertex_count):
+		var offset: int = uv_accessor.offset + index * 8
+		uv.append(Vector2(bytes.decode_float(offset), bytes.decode_float(offset + 4)))
+	if not cache.has(image_index):
+		var image := Image.new()
+		var status: Error = image.load_png_from_buffer(encoded) if image_data.mimeType == "image/png" else image.load_jpg_from_buffer(encoded)
+		if status != OK or image.is_empty() or image.get_width() != dimensions.x or image.get_height() != dimensions.y:
+			return {"error": "Obrázek nelze dekódovat: %s." % error_string(status)}
+		cache[image_index] = ImageTexture.create_from_image(image)
+	return {"uv": uv, "texture": cache[image_index], "repeat": wrap_s == "REPEAT",
+		"filter": BaseMaterial3D.TEXTURE_FILTER_NEAREST if min_filter == "NEAREST" else BaseMaterial3D.TEXTURE_FILTER_LINEAR, "source": source}
+
+
+static func _image_bytes(image_data: Dictionary, manifest: Dictionary, chunks: Dictionary, bytes: PackedByteArray, header_only: bool = false) -> Dictionary:
 	if not image_data.has("bufferView") or not _index(image_data.bufferView, manifest.bufferViews.size()):
 		return {"error": "Obrázek odkazuje na neexistující bufferView."}
 	var view: Dictionary = manifest.bufferViews[int(image_data.bufferView)]
@@ -304,28 +614,22 @@ static func _base_texture(binding: Variant, attributes: Dictionary, vertex_count
 		return {"error": "Obrázek musí odkazovat na IMAG chunk."}
 	if chunk.codec != 0:
 		return {"warning": "Obrázek používá nepodporovanou kompresi chunku."}
-	var uv := PackedVector2Array()
-	for index in range(vertex_count):
-		var offset: int = uv_accessor.offset + index * 8
-		uv.append(Vector2(bytes.decode_float(offset), bytes.decode_float(offset + 4)))
-	if not cache.has(image_index):
-		var start: int = chunk.offset + int(view.byteOffset)
-		var encoded := bytes.slice(start, start + int(view.byteLength))
-		var dimensions := _image_dimensions(encoded, image_data.mimeType)
-		if dimensions.x <= 0 or dimensions.y <= 0:
-			return {"error": "Obrázek nemá platnou hlavičku odpovídající mimeType."}
-		if dimensions.x > MAX_IMAGE_DIMENSION or dimensions.y > MAX_IMAGE_DIMENSION or dimensions.x * dimensions.y > MAX_IMAGE_PIXELS:
-			return {"warning": "Obrázek překračuje limit velikosti náhledu."}
-		var image := Image.new()
-		var status: Error = image.load_png_from_buffer(encoded) if image_data.mimeType == "image/png" else image.load_jpg_from_buffer(encoded)
-		if status != OK or image.is_empty() or image.get_width() != dimensions.x or image.get_height() != dimensions.y:
-			return {"error": "Obrázek nelze dekódovat: %s." % error_string(status)}
-		cache[image_index] = ImageTexture.create_from_image(image)
-	return {"uv": uv, "texture": cache[image_index], "repeat": wrap_s == "REPEAT",
-		"filter": BaseMaterial3D.TEXTURE_FILTER_NEAREST if min_filter == "NEAREST" else BaseMaterial3D.TEXTURE_FILTER_LINEAR}
+	var start: int = chunk.offset + int(view.byteOffset)
+	if start < 0 or start > bytes.size() or int(view.byteLength) > bytes.size() - start:
+		return {"error": "Data obrázku jsou mimo rozsah souboru."}
+	var length: int = mini(int(view.byteLength), 148) if header_only else int(view.byteLength)
+	return {"bytes": bytes.slice(start, start + length)}
 
 
 static func _image_dimensions(data: PackedByteArray, mime: String) -> Vector2i:
+	if mime == "image/vnd-ms.dds":
+		if data.size() < 148 or data.slice(0, 4).get_string_from_ascii() != "DDS " or data.decode_u32(4) != 124 or data.slice(84, 88).get_string_from_ascii() != "DX10":
+			return Vector2i.ZERO
+		return Vector2i(data.decode_u32(16), data.decode_u32(12))
+	if mime == "image/ktx2":
+		if data.size() < 80 or data.slice(0, 12) != PackedByteArray([171, 75, 84, 88, 32, 50, 48, 187, 13, 10, 26, 10]):
+			return Vector2i.ZERO
+		return Vector2i(data.decode_u32(20), data.decode_u32(24))
 	if mime == "image/png":
 		if data.size() < 24 or data.slice(0, 8) != PackedByteArray([137, 80, 78, 71, 13, 10, 26, 10]) or data.slice(12, 16).get_string_from_ascii() != "IHDR":
 			return Vector2i.ZERO
@@ -365,17 +669,20 @@ static func _accessor(index: Variant, component: String, shape: String, manifest
 	if not _index(index, manifest.accessors.size()):
 		return {"error": "Atribut odkazuje na neexistující accessor."}
 	var accessor: Dictionary = manifest.accessors[int(index)]
-	if accessor.type != shape or (component == "INDEX" and not ["U16", "U32"].has(accessor.componentType)) or (component != "INDEX" and accessor.componentType != component) or accessor.get("normalized", false):
+	var format_ok: bool = (component == "INDEX" and ["U16", "U32"].has(accessor.componentType) and not accessor.get("normalized", false)) or (component == "COLOR" and ((accessor.componentType == "U8" and accessor.get("normalized", false)) or (accessor.componentType == "F32" and not accessor.get("normalized", false)))) or (component != "INDEX" and component != "COLOR" and accessor.componentType == component and not accessor.get("normalized", false))
+	if accessor.type != shape or not format_ok:
 		return {"error": "Nepodporovaný nebo neplatný formát accessor %d." % int(index)}
-	if int(accessor.count) > limit:
+	if not Validator._is_uint(accessor.count) or int(accessor.count) > limit:
 		return {"error": "Geometrie překračuje limit náhledu."}
 	var view: Dictionary = manifest.bufferViews[int(accessor.bufferView)]
 	var chunk: Dictionary = chunks[int(view.chunkId)]
 	if chunk.codec != 0:
 		return {"error": "Geometrie vyžaduje nepodporovanou kompresi."}
-	var offset: int = chunk.offset + int(view.byteOffset) + int(accessor.get("byteOffset", 0))
-	if offset < 0 or offset >= bytes.size():
-		return {"error": "Accessor začíná mimo soubor."}
+	var local_offset: int = int(accessor.get("byteOffset", 0))
+	var length: int = int(accessor.count) * int(Validator.COMPONENT_COUNTS[shape]) * int(Validator.COMPONENT_SIZES[accessor.componentType])
+	var offset: int = chunk.offset + int(view.byteOffset) + local_offset
+	if local_offset < 0 or local_offset > int(view.byteLength) or length > int(view.byteLength) - local_offset or offset < 0 or offset > bytes.size() or length > bytes.size() - offset:
+		return {"error": "Accessor přesahuje bufferView nebo soubor."}
 	return {"accessor": accessor, "offset": offset}
 
 

@@ -4,7 +4,7 @@
 	"limitations": [
 		"Subset checks do not establish full ADM validity or conformance.",
 		"Extension data is preserved, not interpreted; required extensions remain unsupported.",
-		"Rendering, texture decoding, animation evaluation and IK are not implemented."
+		"Only a separate diagnostic static geometry preview with partial material and PNG/JPEG texture support exists; animation evaluation and IK are not implemented."
 	],
 	"reportType": "Uploaded ADM assets: validation subset",
 	"results": [
@@ -19,12 +19,12 @@
 					"ADM-IK-1"
 				],
 				"implemented": [
-					"ADM-CONTAINER-1 (RAW chunks, header/directory/hash checks)",
+					"ADM-CONTAINER-1 (partial: RAW chunks, header/directory/hash and dependency checks; no streaming)",
 					"ADM-CORE-1 (metadata and structural validation subset)",
 					"ADM-ANIM-1 (container and library metadata validation subset)"
 				],
 				"notes": [
-					"Validation is partial; the diagnostic preview is not a full ADM renderer. Texture decoding, animation evaluation, and IK solving are unsupported."
+					"Validation is partial; the diagnostic preview supports some PNG/JPEG textures but is not a full ADM renderer. Animation evaluation and IK solving are unsupported."
 				]
 			},
 			"deviations": [],
@@ -44,12 +44,12 @@
 					"ADM-SHADER-CORE-1"
 				],
 				"implemented": [
-					"ADM-CONTAINER-1 (RAW chunks, header/directory/hash checks)",
+					"ADM-CONTAINER-1 (partial: RAW chunks, header/directory/hash and dependency checks; no streaming)",
 					"ADM-CORE-1 (metadata and structural validation subset)",
 					"ADM-ANIM-1 (container and library metadata validation subset)"
 				],
 				"notes": [
-					"Validation is partial; the diagnostic preview is not a full ADM renderer. Texture decoding, animation evaluation, and IK solving are unsupported."
+					"Validation is partial; the diagnostic preview supports some PNG/JPEG textures but is not a full ADM renderer. Animation evaluation and IK solving are unsupported."
 				]
 			},
 			"deviations": [],
@@ -59,6 +59,104 @@
 			"source": "core20_shaders.adm",
 			"status": "supported",
 			"unsupported": []
+		},
+		{
+			"assetSha256": "f96b4571ff5f373aa0cb1085497f061feec1132ef45a597c0109675eb7feae02",
+			"capabilities": {
+				"declared": [
+					"required-extension:ADM_joint_display_v1",
+					"required-extension:ADM_vertex_control_v1",
+					"extension:ADM_joint_display_v1",
+					"extension:ADM_vertex_control_v1",
+					"ADM-CORE-1",
+					"triangle-mesh-data",
+					"ADM-SHADER-CORE-1",
+					"skinning"
+				],
+				"implemented": [
+					"ADM-CONTAINER-1 (partial: RAW chunks, header/directory/hash and dependency checks; no streaming)",
+					"ADM-CORE-1 (metadata and structural validation subset)",
+					"ADM-ANIM-1 (container and library metadata validation subset)"
+				],
+				"notes": [
+					"Validation is partial; the diagnostic preview supports some PNG/JPEG textures but is not a full ADM renderer. Animation evaluation and IK solving are unsupported."
+				]
+			},
+			"deviations": [
+				"Required extension 'ADM_joint_display_v1' is not implemented by this validation milestone.",
+				"Required extension 'ADM_vertex_control_v1' is not implemented by this validation milestone."
+			],
+			"diagnostics": [],
+			"expectedSubsetStatus": null,
+			"runtimeStatus": "unsupported",
+			"source": "human.adm",
+			"status": "unsupported",
+			"unsupported": [
+				"Required extension 'ADM_joint_display_v1' is not implemented by this validation milestone.",
+				"Required extension 'ADM_vertex_control_v1' is not implemented by this validation milestone."
+			]
+		},
+		{
+			"assetSha256": "ab740bdeb796b23fc2c3388408a6d878cb1397ebad65a60f4d1262154d591c5e",
+			"capabilities": {
+				"declared": [
+					"required-extension:ADM_animation_timing_v1",
+					"extension:ADM_animation_timing_v1",
+					"ADM-ANIM-1",
+					"ADM-CONTAINER-1",
+					"animation-target:bone"
+				],
+				"implemented": [
+					"ADM-CONTAINER-1 (partial: RAW chunks, header/directory/hash and dependency checks; no streaming)",
+					"ADM-CORE-1 (metadata and structural validation subset)",
+					"ADM-ANIM-1 (container and library metadata validation subset)"
+				],
+				"notes": [
+					"Validation is partial; the diagnostic preview supports some PNG/JPEG textures but is not a full ADM renderer. Animation evaluation and IK solving are unsupported."
+				]
+			},
+			"deviations": [
+				"Required extension 'ADM_animation_timing_v1' is not implemented by this validation milestone."
+			],
+			"diagnostics": [],
+			"expectedSubsetStatus": null,
+			"runtimeStatus": "unsupported",
+			"source": "human_locomotion.adm_anim",
+			"status": "unsupported",
+			"unsupported": [
+				"Required extension 'ADM_animation_timing_v1' is not implemented by this validation milestone."
+			]
+		},
+		{
+			"assetSha256": "58c788f6044fb15b9c5564a34cb6bbe3915c3b050ac975ae06bcda72ed45f2f0",
+			"capabilities": {
+				"declared": [
+					"required-extension:ADM_animation_timing_v1",
+					"extension:ADM_animation_timing_v1",
+					"ADM-ANIM-1",
+					"ADM-CONTAINER-1",
+					"animation-target:bone"
+				],
+				"implemented": [
+					"ADM-CONTAINER-1 (partial: RAW chunks, header/directory/hash and dependency checks; no streaming)",
+					"ADM-CORE-1 (metadata and structural validation subset)",
+					"ADM-ANIM-1 (container and library metadata validation subset)"
+				],
+				"notes": [
+					"Validation is partial; the diagnostic preview supports some PNG/JPEG textures but is not a full ADM renderer. Animation evaluation and IK solving are unsupported."
+				]
+			},
+			"deviations": [
+				"Required extension 'ADM_animation_timing_v1' is not implemented by this validation milestone."
+			],
+			"diagnostics": [],
+			"expectedSubsetStatus": null,
+			"runtimeStatus": "unsupported",
+			"source": "human_locomotion_injured.adm_anim",
+			"status": "unsupported",
+			"unsupported": [
+				"Required extension 'ADM_animation_timing_v1' is not implemented by this validation milestone."
+			]
 		},
 		{
 			"assetSha256": "e5fde6daad368d4c38e35453594ffdeac04d28c8e079ea87bc3449768693f4b7",
@@ -74,12 +172,12 @@
 					"ADM-IK-1"
 				],
 				"implemented": [
-					"ADM-CONTAINER-1 (RAW chunks, header/directory/hash checks)",
+					"ADM-CONTAINER-1 (partial: RAW chunks, header/directory/hash and dependency checks; no streaming)",
 					"ADM-CORE-1 (metadata and structural validation subset)",
 					"ADM-ANIM-1 (container and library metadata validation subset)"
 				],
 				"notes": [
-					"Validation is partial; the diagnostic preview is not a full ADM renderer. Texture decoding, animation evaluation, and IK solving are unsupported."
+					"Validation is partial; the diagnostic preview supports some PNG/JPEG textures but is not a full ADM renderer. Animation evaluation and IK solving are unsupported."
 				]
 			},
 			"deviations": [
@@ -108,12 +206,12 @@
 					"ADM-SHADER-CORE-1"
 				],
 				"implemented": [
-					"ADM-CONTAINER-1 (RAW chunks, header/directory/hash checks)",
+					"ADM-CONTAINER-1 (partial: RAW chunks, header/directory/hash and dependency checks; no streaming)",
 					"ADM-CORE-1 (metadata and structural validation subset)",
 					"ADM-ANIM-1 (container and library metadata validation subset)"
 				],
 				"notes": [
-					"Validation is partial; the diagnostic preview is not a full ADM renderer. Texture decoding, animation evaluation, and IK solving are unsupported."
+					"Validation is partial; the diagnostic preview supports some PNG/JPEG textures but is not a full ADM renderer. Animation evaluation and IK solving are unsupported."
 				]
 			},
 			"deviations": [
@@ -140,12 +238,12 @@
 					"ADM-SHADER-CORE-1"
 				],
 				"implemented": [
-					"ADM-CONTAINER-1 (RAW chunks, header/directory/hash checks)",
+					"ADM-CONTAINER-1 (partial: RAW chunks, header/directory/hash and dependency checks; no streaming)",
 					"ADM-CORE-1 (metadata and structural validation subset)",
 					"ADM-ANIM-1 (container and library metadata validation subset)"
 				],
 				"notes": [
-					"Validation is partial; the diagnostic preview is not a full ADM renderer. Texture decoding, animation evaluation, and IK solving are unsupported."
+					"Validation is partial; the diagnostic preview supports some PNG/JPEG textures but is not a full ADM renderer. Animation evaluation and IK solving are unsupported."
 				]
 			},
 			"deviations": [],
@@ -171,12 +269,12 @@
 					"ADM-SHADER-CORE-1"
 				],
 				"implemented": [
-					"ADM-CONTAINER-1 (RAW chunks, header/directory/hash checks)",
+					"ADM-CONTAINER-1 (partial: RAW chunks, header/directory/hash and dependency checks; no streaming)",
 					"ADM-CORE-1 (metadata and structural validation subset)",
 					"ADM-ANIM-1 (container and library metadata validation subset)"
 				],
 				"notes": [
-					"Validation is partial; the diagnostic preview is not a full ADM renderer. Texture decoding, animation evaluation, and IK solving are unsupported."
+					"Validation is partial; the diagnostic preview supports some PNG/JPEG textures but is not a full ADM renderer. Animation evaluation and IK solving are unsupported."
 				]
 			},
 			"deviations": [
@@ -203,12 +301,12 @@
 					"ADM-SHADER-CORE-1"
 				],
 				"implemented": [
-					"ADM-CONTAINER-1 (RAW chunks, header/directory/hash checks)",
+					"ADM-CONTAINER-1 (partial: RAW chunks, header/directory/hash and dependency checks; no streaming)",
 					"ADM-CORE-1 (metadata and structural validation subset)",
 					"ADM-ANIM-1 (container and library metadata validation subset)"
 				],
 				"notes": [
-					"Validation is partial; the diagnostic preview is not a full ADM renderer. Texture decoding, animation evaluation, and IK solving are unsupported."
+					"Validation is partial; the diagnostic preview supports some PNG/JPEG textures but is not a full ADM renderer. Animation evaluation and IK solving are unsupported."
 				]
 			},
 			"deviations": [],
@@ -230,12 +328,12 @@
 					"ADM-SHADER-CORE-1"
 				],
 				"implemented": [
-					"ADM-CONTAINER-1 (RAW chunks, header/directory/hash checks)",
+					"ADM-CONTAINER-1 (partial: RAW chunks, header/directory/hash and dependency checks; no streaming)",
 					"ADM-CORE-1 (metadata and structural validation subset)",
 					"ADM-ANIM-1 (container and library metadata validation subset)"
 				],
 				"notes": [
-					"Validation is partial; the diagnostic preview is not a full ADM renderer. Texture decoding, animation evaluation, and IK solving are unsupported."
+					"Validation is partial; the diagnostic preview supports some PNG/JPEG textures but is not a full ADM renderer. Animation evaluation and IK solving are unsupported."
 				]
 			},
 			"deviations": [],
@@ -257,12 +355,12 @@
 					"ADM-SHADER-CORE-1"
 				],
 				"implemented": [
-					"ADM-CONTAINER-1 (RAW chunks, header/directory/hash checks)",
+					"ADM-CONTAINER-1 (partial: RAW chunks, header/directory/hash and dependency checks; no streaming)",
 					"ADM-CORE-1 (metadata and structural validation subset)",
 					"ADM-ANIM-1 (container and library metadata validation subset)"
 				],
 				"notes": [
-					"Validation is partial; the diagnostic preview is not a full ADM renderer. Texture decoding, animation evaluation, and IK solving are unsupported."
+					"Validation is partial; the diagnostic preview supports some PNG/JPEG textures but is not a full ADM renderer. Animation evaluation and IK solving are unsupported."
 				]
 			},
 			"deviations": [
@@ -285,12 +383,12 @@
 					"triangle-mesh-data"
 				],
 				"implemented": [
-					"ADM-CONTAINER-1 (RAW chunks, header/directory/hash checks)",
+					"ADM-CONTAINER-1 (partial: RAW chunks, header/directory/hash and dependency checks; no streaming)",
 					"ADM-CORE-1 (metadata and structural validation subset)",
 					"ADM-ANIM-1 (container and library metadata validation subset)"
 				],
 				"notes": [
-					"Validation is partial; the diagnostic preview is not a full ADM renderer. Texture decoding, animation evaluation, and IK solving are unsupported."
+					"Validation is partial; the diagnostic preview supports some PNG/JPEG textures but is not a full ADM renderer. Animation evaluation and IK solving are unsupported."
 				]
 			},
 			"deviations": [],
@@ -311,12 +409,12 @@
 					"ADM-SHADER-CORE-1"
 				],
 				"implemented": [
-					"ADM-CONTAINER-1 (RAW chunks, header/directory/hash checks)",
+					"ADM-CONTAINER-1 (partial: RAW chunks, header/directory/hash and dependency checks; no streaming)",
 					"ADM-CORE-1 (metadata and structural validation subset)",
 					"ADM-ANIM-1 (container and library metadata validation subset)"
 				],
 				"notes": [
-					"Validation is partial; the diagnostic preview is not a full ADM renderer. Texture decoding, animation evaluation, and IK solving are unsupported."
+					"Validation is partial; the diagnostic preview supports some PNG/JPEG textures but is not a full ADM renderer. Animation evaluation and IK solving are unsupported."
 				]
 			},
 			"deviations": [],
@@ -338,12 +436,12 @@
 					"ADM-SHADER-CORE-1"
 				],
 				"implemented": [
-					"ADM-CONTAINER-1 (RAW chunks, header/directory/hash checks)",
+					"ADM-CONTAINER-1 (partial: RAW chunks, header/directory/hash and dependency checks; no streaming)",
 					"ADM-CORE-1 (metadata and structural validation subset)",
 					"ADM-ANIM-1 (container and library metadata validation subset)"
 				],
 				"notes": [
-					"Validation is partial; the diagnostic preview is not a full ADM renderer. Texture decoding, animation evaluation, and IK solving are unsupported."
+					"Validation is partial; the diagnostic preview supports some PNG/JPEG textures but is not a full ADM renderer. Animation evaluation and IK solving are unsupported."
 				]
 			},
 			"deviations": [],
@@ -356,8 +454,8 @@
 		}
 	],
 	"specification": {
-		"commit": "0c6e9539c4e3b8cc7d8249ebed7bcfcfe12e9167",
-		"url": "https://github.com/BerretW/ADM/blob/main/adm-standard/ADM-1.0-SPEC.md",
+		"commit": "0fe5ac81683584683a6d83b40bf779d6d219cde5",
+		"url": "https://github.com/BerretW/ADM/blob/0fe5ac81683584683a6d83b40bf779d6d219cde5/adm-standard/ADM-1.0-SPEC.md",
 		"version": "ADM 1.0"
 	}
 }

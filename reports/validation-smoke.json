@@ -1,6 +1,6 @@
 {
 	"capabilities": [
-		"ADM-CONTAINER-1 (RAW chunks, header/directory/hash checks)",
+		"ADM-CONTAINER-1 (partial: RAW chunks, header/directory/hash and dependency checks; no streaming)",
 		"ADM-CORE-1 (metadata and structural validation subset)",
 		"ADM-ANIM-1 (container and library metadata validation subset)"
 	],
@@ -11,7 +11,8 @@
 	"engineVersion": "Godot 4.7.2-stable",
 	"limitations": [
 		"Cross-engine reference provenance and independently verified conformance are not established.",
-		"Rendering, texture/image decoding, animation evaluation, and IK solving are not implemented.",
+		"Only a separate diagnostic static geometry preview with partial material and PNG/JPEG texture support exists; animation evaluation and IK solving are not implemented.",
+		"The reader loads entire files; ADM-STREAM-1 and partial-loading APIs are not implemented.",
 		"Full per-feature schema validation and JSON integer lexical-form checks are not yet implemented."
 	],
 	"reportType": "ADM validation milestone smoke test",
@@ -130,11 +131,205 @@
 			"unsupported": [
 				"ADM version 2.0 is not supported; expected 1.0."
 			]
+		},
+		{
+			"actual": "supported",
+			"assetSha256": "1690b98e121bcd2e07e1e72591e18bc24daaab3ce185cba6b8eed20ed82a7729",
+			"diagnostics": [],
+			"expected": "supported",
+			"name": "valid_transitive_dependencies",
+			"passed": true,
+			"unsupported": []
+		},
+		{
+			"actual": "unsupported",
+			"assetSha256": "690f5bd396ff9cac7ceb8ab51524324985d328786fe891eda8fe40ce9be51a1e",
+			"diagnostics": [],
+			"expected": "unsupported",
+			"name": "transitive_unavailable_codec",
+			"passed": true,
+			"unsupported": [
+				"ADM-CODEC-ZSTD-1 is required by chunk 3 but no ZSTD decoder is available."
+			]
+		},
+		{
+			"actual": "unsupported",
+			"assetSha256": "879685096920ae37a311bec7eb34adeec0f1695b14af2c8c5ec06fc33c5376ed",
+			"diagnostics": [],
+			"expected": "unsupported",
+			"name": "unavailable_dependency_prevents_accessor_interpretation",
+			"passed": true,
+			"unsupported": [
+				"ADM-CODEC-ZSTD-1 is required by chunk 3 but no ZSTD decoder is available."
+			]
+		},
+		{
+			"actual": "invalid",
+			"assetSha256": "f09b2fc57a7b3a1f68c5d0dddf18dce4a5468e470ddf4391b96e1dd21c511f4e",
+			"diagnostics": [
+				"accessors[0] contains a non-finite F32 value."
+			],
+			"expected": "invalid",
+			"name": "available_dependency_checks_accessor",
+			"passed": true,
+			"unsupported": []
+		},
+		{
+			"actual": "unsupported",
+			"assetSha256": "aee81b58cb6925a34fc4c8f11fa47415ed0744360c1d51aadf652ec4d302275a",
+			"diagnostics": [],
+			"expected": "unsupported",
+			"name": "required_chunk_unavailable_dependency",
+			"passed": true,
+			"unsupported": [
+				"ADM-CODEC-ZSTD-1 is required by chunk 3 but no ZSTD decoder is available."
+			]
+		},
+		{
+			"actual": "unsupported",
+			"assetSha256": "8cc7f3774a030a01feaff3f8368fccbe01e120be318ea6fccfeac8730393ca53",
+			"diagnostics": [],
+			"expected": "unsupported",
+			"name": "transitive_unknown_chunk",
+			"passed": true,
+			"unsupported": [
+				"ADM_ERR_UNSUPPORTED_CHUNK: needed chunk 3 has unknown type FUTR."
+			]
+		},
+		{
+			"actual": "supported",
+			"assetSha256": "9c096cfa1b3eebcdb7b217a6694d5f7c3f3ac9cc3bddb9b6946543924c108fd8",
+			"diagnostics": [
+				"Optional unreferenced ZSTD chunk 3 was not decoded or hash-verified."
+			],
+			"expected": "supported",
+			"name": "unneeded_optional_codec",
+			"passed": true,
+			"unsupported": []
+		},
+		{
+			"actual": "invalid",
+			"assetSha256": "dc9ab69e1cc48ffb32764e30f186dcbdd5fe4b92f3ad28ac40df655272af86df",
+			"diagnostics": [
+				"chunkDependencies[0] references an unknown chunkId."
+			],
+			"expected": "invalid",
+			"name": "unknown_dependency_owner",
+			"passed": true,
+			"unsupported": []
+		},
+		{
+			"actual": "invalid",
+			"assetSha256": "c577ded49540960ffe9e8edcf9749c907386b710fe425ad6216307f4ebece68d",
+			"diagnostics": [
+				"chunkDependencies[0] contains an invalid, duplicate, or self dependency."
+			],
+			"expected": "invalid",
+			"name": "unknown_dependency",
+			"passed": true,
+			"unsupported": []
+		},
+		{
+			"actual": "invalid",
+			"assetSha256": "85ff969c88af3c3ac3dd5d256ce8f024fe1869321001cb5fde6a72f21d96efd1",
+			"diagnostics": [
+				"chunkDependencies[0] contains an invalid, duplicate, or self dependency."
+			],
+			"expected": "invalid",
+			"name": "duplicate_dependency",
+			"passed": true,
+			"unsupported": []
+		},
+		{
+			"actual": "invalid",
+			"assetSha256": "145d987abd292dab3e1edc4dab8ef788899660c17a8642118bde9223c33a0b9f",
+			"diagnostics": [
+				"chunkDependencies[0] contains an invalid, duplicate, or self dependency."
+			],
+			"expected": "invalid",
+			"name": "self_dependency",
+			"passed": true,
+			"unsupported": []
+		},
+		{
+			"actual": "invalid",
+			"assetSha256": "4109021b319922220062152b0aa005031b30c3e8948da839698f876a17c0c046",
+			"diagnostics": [
+				"chunkDependencies[0] must contain only chunkId and a requires array."
+			],
+			"expected": "invalid",
+			"name": "dependency_extra_field",
+			"passed": true,
+			"unsupported": []
+		},
+		{
+			"actual": "invalid",
+			"assetSha256": "207566d955f79104ac5669add4bbcd8d31cd8e7deda88e5b8f279fe8102b4771",
+			"diagnostics": [
+				"chunkDependencies contains duplicate chunkId 1."
+			],
+			"expected": "invalid",
+			"name": "duplicate_dependency_entry",
+			"passed": true,
+			"unsupported": []
+		},
+		{
+			"actual": "invalid",
+			"assetSha256": "b569e8f946003dfe0812461cb1cb76c3800120160f66a7754fbf9ffaf32f6bc0",
+			"diagnostics": [
+				"chunkDependencies contains a cycle."
+			],
+			"expected": "invalid",
+			"name": "dependency_cycle",
+			"passed": true,
+			"unsupported": []
+		},
+		{
+			"actual": "invalid",
+			"assetSha256": "45601f131c2fc56d433137b7948d4a68d6e6b5719dcdaa9828a970287276e98d",
+			"diagnostics": [
+				"chunkDependencies contains a cycle."
+			],
+			"expected": "invalid",
+			"name": "disconnected_dependency_cycle",
+			"passed": true,
+			"unsupported": []
+		},
+		{
+			"actual": "supported",
+			"assetSha256": "b5f1ddef90ce6d41c8cd6b1587f6933523f504f066c291196b7176f18cd1c2bf",
+			"diagnostics": [],
+			"expected": "supported",
+			"name": "valid_stream_hints",
+			"passed": true,
+			"unsupported": []
+		},
+		{
+			"actual": "invalid",
+			"assetSha256": "22a3836022b561b4af974df2b71395acc55fad9d9879aa633fdeb0d5ec7f26e0",
+			"diagnostics": [
+				"streamHints[1] has an unknown or duplicate chunkId."
+			],
+			"expected": "invalid",
+			"name": "duplicate_stream_hint",
+			"passed": true,
+			"unsupported": []
+		},
+		{
+			"actual": "invalid",
+			"assetSha256": "e54d229271e577a6f144ef89049ad8331a17e3c304eeb3386113cb1ab8a50827",
+			"diagnostics": [
+				"streamHints[0].priority must be in 0..255."
+			],
+			"expected": "invalid",
+			"name": "invalid_stream_priority",
+			"passed": true,
+			"unsupported": []
 		}
 	],
 	"specification": {
-		"commit": "0c6e9539c4e3b8cc7d8249ebed7bcfcfe12e9167",
-		"url": "https://github.com/BerretW/ADM/blob/main/adm-standard/ADM-1.0-SPEC.md",
+		"commit": "0fe5ac81683584683a6d83b40bf779d6d219cde5",
+		"url": "https://github.com/BerretW/ADM/blob/0fe5ac81683584683a6d83b40bf779d6d219cde5/adm-standard/ADM-1.0-SPEC.md",
 		"version": "ADM 1.0"
 	}
 }
